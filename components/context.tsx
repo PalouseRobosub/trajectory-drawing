@@ -1,21 +1,24 @@
 'use client'
 
 import {createContext, useContext, useState} from "react";
+import {State} from "@/app/types";
 
-interface State {
-  poolDimensions: {
-    x: number;
-    y: number;
-    z: number;
-  }
-}
+const defaultWaypoints: [number, number, number][] = [
+  [ 1, 1, 0],
+  [ 8, 7, -2],
+  [ 9, 7, -2],
+  [ 9, 4, -3],
+  [ 9, 9, -5],
+  [ 4, 11, 0],
+]
 
 const defaultState = {
   poolDimensions: {
-    x: 5,
-    y: 5,
+    x: 10,
+    y: 15,
     z: 5,
-  }
+  },
+  waypoints: defaultWaypoints,
 }
 
 const stateContext = createContext({})

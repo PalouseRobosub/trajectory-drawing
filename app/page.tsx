@@ -7,6 +7,7 @@ import Axis from "@/components/axis"
 import * as THREE from "three";
 import {useStateContext} from "@/components/context";
 import Pool from "@/components/pool";
+import Path from "@/components/path";
 
 export default function Home() {
 
@@ -32,7 +33,8 @@ export default function Home() {
           <directionalLight intensity={0.5} position={[6, 2, 1]} />
           <ambientLight intensity={0.1} />
           <Axis poolDimensions={state.poolDimensions} />
-          <Pool size={state.poolDimensions} />
+          <Pool poolDimensions={state.poolDimensions} />
+          <Path />
         </Suspense>
       </Canvas>
     </div>

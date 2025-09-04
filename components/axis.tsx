@@ -1,4 +1,5 @@
 import { Text, Line } from "@react-three/drei";
+import {PoolDimensions} from "@/app/types";
 
 const ZAxis = ({ length }: { length: number }) => (
   <Line
@@ -24,7 +25,7 @@ const YAxis = ({ length }: { length: number }) => (
   />
 );
 
-export default function Axis({ poolDimensions }: { poolDimensions: { x: number, y: number, z: number } }) {
+export default function Axis({ poolDimensions }: { poolDimensions: PoolDimensions }) {
   return (
     <group>
       <Text

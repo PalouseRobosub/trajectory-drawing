@@ -1,12 +1,13 @@
 import {Box} from "@react-three/drei";
+import {PoolDimensions} from "@/app/types";
 
 
-const Pool = ({ size }: { size: {x: number, y: number, z: number}}) => {
+const Pool = ({ poolDimensions }: { poolDimensions: PoolDimensions }) => {
 
   return (
     <Box
-      args={[size.x, size.y, size.z, size.x, size.y, size.z]}
-      position={[size.x/2, size.y/2, -size.z/2]}
+      args={[poolDimensions.x, poolDimensions.y, poolDimensions.z, poolDimensions.x, poolDimensions.y, poolDimensions.z]}
+      position={[poolDimensions.x/2, poolDimensions.y/2, -poolDimensions.z/2]}
       rotation={[0, 0, 0]}
     >
       <meshBasicMaterial wireframe color="dodgerblue" />

@@ -1,7 +1,8 @@
-import {Waves} from "lucide-react";
+import {Download, Waves, Waypoints} from "lucide-react";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import PoolMenu from "@/components/poolMenu";
+import PathMenu from "@/components/pathMenu";
 
 const Controls = () => {
 
@@ -16,6 +17,26 @@ const Controls = () => {
           </PopoverTrigger>
           <PopoverContent className="w-min" side="left">
             <PoolMenu />
+          </PopoverContent>
+        </Popover>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="default" className="cursor-pointer aspect-square">
+              <Waypoints className="scale-150" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-min" side="left">
+            <PathMenu />
+          </PopoverContent>
+        </Popover>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="default" className="cursor-pointer aspect-square">
+              <Download className="scale-150" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-min" side="left">
+
           </PopoverContent>
         </Popover>
       </div>

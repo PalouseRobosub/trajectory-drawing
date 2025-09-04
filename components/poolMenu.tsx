@@ -10,7 +10,7 @@ const PoolMenu = () => {
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <div className="text-nowrap font-semibold">Pool Dimensions</div>
+      <div className="text-nowrap font-semibold px-2">Pool Dimensions</div>
       <div className="flex flex-row items-center gap-2 ">
         X:
         <Input type="number" defaultValue={state.poolDimensions.x} onChange={(e) => setState({...state, poolDimensions: {...state.poolDimensions, x: parseInt(e.target.value)}})} />
