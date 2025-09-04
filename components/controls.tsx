@@ -1,0 +1,26 @@
+import {Waves} from "lucide-react";
+import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import PoolMenu from "@/components/poolMenu";
+
+const Controls = () => {
+
+  return (
+    <div className="fixed right-0 h-screen flex flex-col justify-center z-20 pr-2 gap-4">
+      <div className="bg-white p-2 flex flex-col gap-2 text-lg rounded-xl">
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="default" className="cursor-pointer aspect-square">
+              <Waves className="scale-150" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-min" side="left">
+            <PoolMenu />
+          </PopoverContent>
+        </Popover>
+      </div>
+    </div>
+  )
+}
+
+export default Controls
