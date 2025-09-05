@@ -11,7 +11,7 @@ const ZAxis = ({ length }: { length: number }) => (
 
 const XAxis = ({ length }: { length: number }) => (
   <Line
-    points={[[0, 0, 0], [length+1, 0, 0]]}
+    points={[[-1, 0, 0], [length+1, 0, 0]]}
     color="red"
     lineWidth={2}
   />
@@ -19,7 +19,7 @@ const XAxis = ({ length }: { length: number }) => (
 
 const YAxis = ({ length }: { length: number }) => (
   <Line
-    points={[[0, 0, 0], [0, length+1, 0]]}
+    points={[[0, -1, 0], [0, length+1, 0]]}
     color="green"
     lineWidth={2}
   />

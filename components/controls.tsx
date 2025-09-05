@@ -3,6 +3,7 @@ import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import PoolMenu from "@/components/poolMenu";
 import PathMenu from "@/components/pathMenu";
+import ExportMenu from "@/components/exportMenu";
 
 const Controls = () => {
 
@@ -36,7 +37,7 @@ const Controls = () => {
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-min" side="left">
-
+            <ExportMenu />
           </PopoverContent>
         </Popover>
       </div>

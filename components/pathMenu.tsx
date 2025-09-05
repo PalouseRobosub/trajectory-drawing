@@ -141,23 +141,23 @@ const Path = () => {
                   <Input className="w-32" defaultValue={waypoint.name} onChange={(e) => setName(e.target.value, i)} />
                 </TableCell>
                 <TableCell className="flex flex-row items-center">
-                  (<Input defaultValue={waypoint.position[0]} onChange={(e) => setPosition(parseInt(e.target.value), i, 'x')} className="min-w-14 w-full" />,
-                  <Input defaultValue={waypoint.position[1]} onChange={(e) => setPosition(parseInt(e.target.value), i, 'y')} className="min-w-14 w-full" />)
+                  (<Input defaultValue={waypoint.position[0]} onChange={(e) => setPosition(parseFloat(e.target.value), i, 'x')} className="min-w-14 w-full" />,
+                  <Input defaultValue={waypoint.position[1]} onChange={(e) => setPosition(parseFloat(e.target.value), i, 'y')} className="min-w-14 w-full" />)
                 </TableCell>
                 <TableCell>
-                  <Input defaultValue={waypoint.position[2]} onChange={(e) => setPosition(parseInt(e.target.value), i, 'z')} className="min-w-14 w-full" />
+                  <Input defaultValue={waypoint.position[2]} onChange={(e) => setPosition(parseFloat(e.target.value), i, 'z')} className="min-w-14 w-full" />
                 </TableCell>
                 <TableCell className="flex flex-row items-center">
-                  (<Input className="min-w-14 w-full" defaultValue={waypoint.orientation[0]} onChange={(e) => setOrientation(parseInt(e.target.value), i, 'x')} />,
-                  <Input className="min-w-14 w-full" defaultValue={waypoint.orientation[1]} onChange={(e) => setOrientation(parseInt(e.target.value), i, 'y')} />,
-                  <Input className="min-w-14 w-full" defaultValue={waypoint.orientation[2]} onChange={(e) => setOrientation(parseInt(e.target.value), i, 'z')} />,
-                  <Input className="min-w-14 w-full" defaultValue={waypoint.orientation[3]} onChange={(e) => setOrientation(parseInt(e.target.value), i, 'w')} />)
+                  (<Input className="min-w-14 w-full" defaultValue={waypoint.orientation[0]} onChange={(e) => setOrientation(parseFloat(e.target.value), i, 'x')} />,
+                  <Input className="min-w-14 w-full" defaultValue={waypoint.orientation[1]} onChange={(e) => setOrientation(parseFloat(e.target.value), i, 'y')} />,
+                  <Input className="min-w-14 w-full" defaultValue={waypoint.orientation[2]} onChange={(e) => setOrientation(parseFloat(e.target.value), i, 'z')} />,
+                  <Input className="min-w-14 w-full" defaultValue={waypoint.orientation[3]} onChange={(e) => setOrientation(parseFloat(e.target.value), i, 'w')} />)
                 </TableCell>
                 <TableCell>
-                  <Input className="min-w-14 w-full" defaultValue={waypoint.velocity} onChange={(e) => setVelocity(parseInt(e.target.value), i)} />
+                  <Input className="min-w-14 w-full" defaultValue={waypoint.velocity} onChange={(e) => setVelocity(parseFloat(e.target.value), i)} />
                 </TableCell>
                 <TableCell>
-                  <Input className="min-w-14 w-full" defaultValue={waypoint.holdTime} onChange={(e) => setHoldTime(parseInt(e.target.value), i)} />
+                  <Input className="min-w-14 w-full" defaultValue={waypoint.holdTime} onChange={(e) => setHoldTime(parseFloat(e.target.value), i)} />
                 </TableCell>
                 <TableCell>
                   <Button variant="destructive" className="cursor-pointer" onClick={() => deleteWaypoint(i)}>
