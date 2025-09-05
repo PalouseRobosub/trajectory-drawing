@@ -29,30 +29,13 @@ const ExportMenu = () => {
   const { state } = useStateContext()
 
   const prepareData = (waypoints: Waypoint[], trajectoryData: typeof defaultData) => {
-    const preparedWaypoints = waypoints.map((waypoint: Waypoint, i) => ({
-      seq: i + 1,
-      name: waypoint.name,
-      position: {
-        x: waypoint.position[0],
-        y: waypoint.position[1],
-        z: waypoint.position[2],
-      },
-      orientation: {
-        x: waypoint.orientation[0],
-        y: waypoint.orientation[1],
-        z: waypoint.orientation[2],
-        w: waypoint.orientation[3],
-      },
-      velocity: waypoint.velocity,
-      hold_time: waypoint.holdTime
-    }))
 
     return {
       trajectory: {
         name: trajectoryData.name,
         frame_id: trajectoryData.frame_id,
         vehicle_type: trajectoryData.vehicle_type,
-        waypoints: preparedWaypoints,
+        waypoints: waypoints,
         parameters: {
           max_linear_velocity: trajectoryData.max_linear_velocity,
           max_angular_velocity: trajectoryData.max_angular_velocity,

@@ -1,5 +1,6 @@
 import {Billboard, Line, Sphere, Text} from "@react-three/drei"
 import {useStateContext} from "@/components/context";
+import {cartToArray} from "@/lib/cords";
 
 const Path = () => {
 
@@ -11,7 +12,7 @@ const Path = () => {
         if (!state.waypoints[i+1]) {
           return (
             <group key={i}>
-              {state.waypointOptions.waypointLabels !== 'none' && <Billboard position={[waypoint.position[0], waypoint.position[1], waypoint.position[2] + .2]}>
+              {state.waypointOptions.waypointLabels !== 'none' && <Billboard position={[waypoint.position.x, waypoint.position.y, waypoint.position.z + .2]}>
                 <Text
                   color="black"
                   scale={[0.2, 0.2, 0.2]}
@@ -21,7 +22,7 @@ const Path = () => {
               </Billboard>}
               {state.waypointOptions.dotWaypoints && <Sphere
                 args={[0.1]}
-                position={waypoint.position}
+                position={cartToArray(waypoint.position)}
               >
                 <meshBasicMaterial color="red"/>
               </Sphere>}
@@ -30,14 +31,14 @@ const Path = () => {
         }
         return (
           <group key={i}>
-            <Line points={[waypoint.position, state.waypoints[i+1].position]} color="rebeccapurple" lineWidth={4} />
+            <Line points={[cartToArray(waypoint.position), cartToArray(state.waypoints[i+1].position)]} color="rebeccapurple" lineWidth={4} />
             {state.waypointOptions.dotWaypoints && <Sphere
               args={[0.1]}
-              position={waypoint.position}
+              position={cartToArray(waypoint.position)}
             >
               <meshBasicMaterial color={`${i === 0 ? "green" : "black"}`}/>
             </Sphere>}
-            {state.waypointOptions.waypointLabels !== 'none' && <Billboard position={[waypoint.position[0], waypoint.position[1], waypoint.position[2] + .2]}>
+            {state.waypointOptions.waypointLabels !== 'none' && <Billboard position={[waypoint.position.x, waypoint.position.y, waypoint.position.z + .2]}>
               <Text
                 color="black"
                 scale={[0.2, 0.2, 0.2]}

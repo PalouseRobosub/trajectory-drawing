@@ -1,10 +1,11 @@
 import {Box, Cylinder, Edges, Torus} from "@react-three/drei";
+import {CartesianCoords} from "@/app/types";
 
 
-const Guppie = ({ position }: { position: [number, number, number] }) => {
+const Guppie = ({ position }: { position: CartesianCoords }) => {
 
   return (
-    <group position={position}>
+    <group position={[position.x, position.y, position.z]}>
       <group position={[-0.172, 0, 0.184]}>
         <Cylinder
           args={[0.17, 0.17, 0.03, 64]}

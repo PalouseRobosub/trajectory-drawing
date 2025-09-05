@@ -4,12 +4,24 @@ export interface PoolDimensions {
   z: number;
 }
 
+export interface CartesianCoords {
+  x: number;
+  y: number;
+  z: number;
+}
+
 export interface Waypoint {
+  seq: number;
   name: string;
-  position: [number, number, number];
-  orientation: [number, number, number, number];
+  position: CartesianCoords;
+  orientation: {
+    x: number;
+    y: number;
+    z: number;
+    w: number;
+  };
   velocity: number;
-  holdTime: number;
+  hold_time: number;
 }
 
 export interface State {
