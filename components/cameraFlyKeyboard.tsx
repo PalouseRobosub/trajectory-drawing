@@ -1,6 +1,6 @@
 import {CameraControls, useKeyboardControls} from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { Controls } from '@/app/page';
+import { Controls } from '@/app/types';
 import {RefObject} from "react";
 
 export function CameraFlyKeyboard({ cameraControlsRef }: { cameraControlsRef: RefObject<CameraControls|null> }) {

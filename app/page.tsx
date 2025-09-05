@@ -9,15 +9,7 @@ import {useStateContext} from "@/components/context";
 import Pool from "@/components/pool";
 import Path from "@/components/path";
 import {CameraFlyKeyboard} from "@/components/cameraFlyKeyboard";
-
-export enum Controls {
-  forward = 'forward',
-  back = 'back',
-  left = 'left',
-  right = 'right',
-  up = 'up',
-  down = 'down',
-}
+import {Controls} from "@/app/types";
 
 export default function Home() {
 
