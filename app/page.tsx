@@ -44,7 +44,7 @@ export default function Home() {
               </Text>
             }
           >
-            <Environment preset="studio" background={false} />
+            <Environment preset="warehouse" background={false} />
             <OrbitControls />
             <CameraControls ref={cameraControlsRef} />
             <CameraFlyKeyboard cameraControlsRef={cameraControlsRef}/>
