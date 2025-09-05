@@ -5,42 +5,42 @@ import {State, Waypoint} from "@/app/types";
 
 const defaultWaypoints: Waypoint[] = [
   {
-    name: "Waypoint 0",
+    name: "Waypoint 1",
     position: [1, 1, 0],
     orientation: [0, 0, 0, 1],
     velocity: 1,
     holdTime: 0,
   },
   {
-    name: "Waypoint 1",
-    position: [8, 7, -2],
-    orientation: [0, 0, 0, 1],
-    velocity: 1,
-    holdTime: 0,
-  },
-  {
     name: "Waypoint 2",
-    position: [9, 7, -2],
+    position: [3, 7, -4],
     orientation: [0, 0, 0, 1],
     velocity: 1,
     holdTime: 0,
   },
   {
     name: "Waypoint 3",
-    position: [9, 4, -3],
+    position: [8, 6, -2],
     orientation: [0, 0, 0, 1],
     velocity: 1,
     holdTime: 0,
   },
   {
     name: "Waypoint 4",
-    position: [9, 9, -5],
+    position: [9, 4, -3],
     orientation: [0, 0, 0, 1],
     velocity: 1,
     holdTime: 0,
   },
   {
     name: "Waypoint 5",
+    position: [9, 9, -5],
+    orientation: [0, 0, 0, 1],
+    velocity: 1,
+    holdTime: 0,
+  },
+  {
+    name: "Waypoint 6",
     position: [4, 11, 0],
     orientation: [0, 0, 0, 1],
     velocity: 1,
@@ -48,14 +48,17 @@ const defaultWaypoints: Waypoint[] = [
   },
 ];
 
-
-const defaultState = {
+const defaultState: State = {
   poolDimensions: {
     x: 10,
     y: 15,
     z: 5,
   },
   waypoints: defaultWaypoints,
+  waypointOptions: {
+    dotWaypoints: true,
+    waypointLabels: "seq"
+  }
 }
 
 const stateContext = createContext({})

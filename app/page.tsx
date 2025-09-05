@@ -29,7 +29,7 @@ export default function Home() {
   ], [])
 
   return (
-    <div className="h-screen w-screen bg-neutral-400 fixed inset-0 z-0">
+    <div className="h-screen w-screen bg-neutral-300 fixed inset-0 z-0">
       <KeyboardControls map={map}>
         <Canvas camera={{ position: [0, 0, 2] }}>
           <Suspense

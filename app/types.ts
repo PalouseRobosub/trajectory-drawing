@@ -15,6 +15,10 @@ export interface Waypoint {
 export interface State {
   poolDimensions: PoolDimensions
   waypoints: Waypoint[];
+  waypointOptions: {
+    dotWaypoints: boolean;
+    waypointLabels: "none"|"seq"|"name"
+  }
 }
 
 export enum Controls {

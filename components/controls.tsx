@@ -1,9 +1,10 @@
-import {Download, Waves, Waypoints} from "lucide-react";
+import {Download, MapPinPen, Waves, Waypoints} from "lucide-react";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import PoolMenu from "@/components/poolMenu";
 import PathMenu from "@/components/pathMenu";
 import ExportMenu from "@/components/exportMenu";
+import WaypointOptionsMenu from "@/components/waypointOptionsMenu";
 
 const Controls = () => {
 
@@ -28,6 +29,16 @@ const Controls = () => {
           </PopoverTrigger>
           <PopoverContent className="w-min" side="left">
             <PathMenu />
+          </PopoverContent>
+        </Popover>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="default" className="cursor-pointer aspect-square">
+              <MapPinPen className="scale-150" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-min" side="left">
+            <WaypointOptionsMenu />
           </PopoverContent>
         </Popover>
         <Popover>

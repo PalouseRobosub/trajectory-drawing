@@ -122,7 +122,7 @@ const Path = () => {
     }
         <TableHeader>
           <TableRow>
-            <TableHead>Index</TableHead>
+            <TableHead>Sequence</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Coordinates</TableHead>
             <TableHead>Depth</TableHead>
@@ -136,7 +136,7 @@ const Path = () => {
 
             return (
               <TableRow key={i}>
-                <TableCell>{i}</TableCell>
+                <TableCell>{i+1}</TableCell>
                 <TableCell>
                   <Input className="w-32" defaultValue={waypoint.name} onChange={(e) => setName(e.target.value, i)} />
                 </TableCell>
