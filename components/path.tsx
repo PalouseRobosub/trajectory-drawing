@@ -16,7 +16,7 @@ const Path = () => {
               color="black"
               anchorX="center"
               anchorY="middle"
-              position={waypoint}
+              position={waypoint.position}
               scale={[0.2, 0.2, 0.2]}
             >
               {i}
@@ -25,12 +25,12 @@ const Path = () => {
         }
         return (
           <group key={i}>
-            <Line points={[waypoint, state.waypoints[i+1]]} color="orangered" lineWidth={2} />
+            <Line points={[waypoint.position, state.waypoints[i+1].position]} color="orangered" lineWidth={2} />
             <Text
               color="black"
               anchorX="center"
               anchorY="middle"
-              position={waypoint}
+              position={waypoint.position}
               scale={[0.2, 0.2, 0.2]}
             >
               {i}

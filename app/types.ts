@@ -4,7 +4,15 @@ export interface PoolDimensions {
   z: number;
 }
 
+export interface Waypoint {
+  name: string;
+  position: [number, number, number];
+  orientation: [number, number, number, number];
+  velocity: number;
+  holdTime: number;
+}
+
 export interface State {
   poolDimensions: PoolDimensions
-  waypoints: [number, number, number][];
+  waypoints: Waypoint[];
 }
