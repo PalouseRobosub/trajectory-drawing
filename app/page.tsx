@@ -2,7 +2,7 @@
 
 import {Canvas} from "@react-three/fiber";
 import {Suspense, useMemo, useRef} from "react";
-import {CameraControls, KeyboardControls, KeyboardControlsEntry, OrbitControls, Text} from "@react-three/drei";
+import {CameraControls, Environment, KeyboardControls, KeyboardControlsEntry, OrbitControls, Text} from "@react-three/drei";
 import Axis from "@/components/axis"
 import * as THREE from "three";
 import {useStateContext} from "@/components/context";
@@ -10,6 +10,7 @@ import Pool from "@/components/pool";
 import Path from "@/components/path";
 import {CameraFlyKeyboard} from "@/components/cameraFlyKeyboard";
 import {Controls} from "@/app/types";
+import Guppie from "@/components/guppie";
 
 export default function Home() {
 
@@ -43,6 +44,7 @@ export default function Home() {
               </Text>
             }
           >
+            <Environment preset="studio" background={false} />
             <OrbitControls />
             <CameraControls ref={cameraControlsRef} />
             <CameraFlyKeyboard cameraControlsRef={cameraControlsRef}/>
@@ -51,6 +53,7 @@ export default function Home() {
             <Axis poolDimensions={state.poolDimensions} />
             <Pool poolDimensions={state.poolDimensions} />
             <Path />
+            <Guppie position={state.waypoints[state.playbackPosition].position} />
           </Suspense>
         </Canvas>
       </KeyboardControls>

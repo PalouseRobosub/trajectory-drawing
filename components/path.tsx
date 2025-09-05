@@ -1,7 +1,6 @@
 import {Billboard, Line, Sphere, Text} from "@react-three/drei"
 import {useStateContext} from "@/components/context";
 
-
 const Path = () => {
 
   const {state} = useStateContext()

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import {Context} from "@/components/context";
 import Controls from "@/components/controls";
+import Playback from "@/components/playback";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +32,7 @@ export default function RootLayout({
         <Context>
           {children}
           <Controls />
+          <Playback />
         </Context>
       </body>
     </html>

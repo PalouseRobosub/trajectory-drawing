@@ -58,7 +58,8 @@ const defaultState: State = {
   waypointOptions: {
     dotWaypoints: true,
     waypointLabels: "seq"
-  }
+  },
+  playbackPosition: 0
 }
 
 const stateContext = createContext({})
