@@ -10,9 +10,6 @@ const Pool = ({ poolDimensions }: { poolDimensions: PoolDimensions }) => {
       position={[poolDimensions.x/2, poolDimensions.y/2, -poolDimensions.z/2]}
     >
       <meshBasicMaterial wireframe color="dodgerblue" />
-      {/*<meshStandardMaterial color="#222" transparent opac
-      rotation={[0, 0, 0]}ity={0.08} />*/}
-      {/*<Edges color="lightseagreen" threshold={15} lineWidth={2} polygonOffset polygonOffsetFactor={1} polygonOffsetUnits={1} />*/}
     </Box>
   )
 }

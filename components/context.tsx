@@ -60,7 +60,6 @@ const defaultState: State = {
     y: 15,
     z: 5,
   },
-  waypoints: defaultWaypoints,
   waypointOptions: {
     dotWaypoints: true,
     waypointLabels: "seq"
@@ -69,19 +68,24 @@ const defaultState: State = {
 }
 
 const stateContext = createContext({})
+const waypointContext = createContext({})
 
 
 const Context = ({ children }: { children: React.ReactNode } ) => {
 
   const [state, setState] = useState<State>(defaultState)
+  const [waypoints, setWaypoints] = useState<Waypoint[]>(defaultWaypoints)
 
   return (
     <stateContext.Provider value={{ state, setState }}>
-      {children}
+      <waypointContext.Provider value={{ waypoints, setWaypoints }}>
+        {children}
+      </waypointContext.Provider>
     </stateContext.Provider>
   )
 }
 
 const useStateContext = () => useContext(stateContext) as { state: State , setState: (state: State) => void }
+const useWaypointContext = () => useContext(waypointContext) as { waypoints: Waypoint[], setWaypoints: (waypoints: Waypoint[]) => void }
 
-export { Context, useStateContext }
+export { Context, useStateContext, useWaypointContext }

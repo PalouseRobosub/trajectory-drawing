@@ -1,6 +1,6 @@
 'use client'
 
-import {useStateContext} from "@/components/context";
+import {useWaypointContext} from "@/components/context";
 import {Input} from "@/components/ui/input";
 import {useState} from "react";
 import {Waypoint} from "@/app/types";
@@ -26,7 +26,7 @@ const ExportMenu = () => {
 
   const [trajectoryData, setTrajectoryData] = useState(defaultData);
 
-  const { state } = useStateContext()
+  const { waypoints } = useWaypointContext()
 
   const prepareData = (waypoints: Waypoint[], trajectoryData: typeof defaultData) => {
 
@@ -52,7 +52,7 @@ const ExportMenu = () => {
   }
 
   const exportYaml = () => {
-    const data = prepareData(state.waypoints, trajectoryData);
+    const data = prepareData(waypoints, trajectoryData);
     const yamlData = YAML.dump(data);
     const blob = new Blob([yamlData], { type: "application/yaml" });
     const url = URL.createObjectURL(blob);

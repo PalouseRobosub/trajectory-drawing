@@ -1,6 +1,6 @@
 'use client'
 
-import {useStateContext} from "@/components/context";
+import {useWaypointContext} from "@/components/context";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Input} from "@/components/ui/input";
 import {Plus, Trash} from "lucide-react";
@@ -8,24 +8,21 @@ import {Button} from "@/components/ui/button";
 
 const Path = () => {
 
-  const { state, setState } = useStateContext()
+  const { waypoints, setWaypoints } = useWaypointContext()
 
   const setName = (name: string, waypointIndex: number) => {
-    const newWaypoints = [...state.waypoints]
+    const newWaypoints = [...waypoints]
     newWaypoints[waypointIndex] = {
       ...newWaypoints[waypointIndex],
       name: name,
     }
 
-    setState({
-      ...state,
-      waypoints: newWaypoints,
-    })
+    setWaypoints(newWaypoints)
   }
 
   const setPosition = (newPosition: number, waypointIndex: number, axis: 'x'|'y'|'z') => {
     if (Number.isNaN(newPosition)) return
-    const newWaypoints = [...state.waypoints]
+    const newWaypoints = [...waypoints]
     newWaypoints[waypointIndex] = {
       ...newWaypoints[waypointIndex],
       position: {
@@ -35,15 +32,12 @@ const Path = () => {
       }
     }
 
-    setState({
-      ...state,
-      waypoints: newWaypoints,
-    })
+    setWaypoints(newWaypoints)
   }
 
   const setOrientation = (newOrientation: number, waypointIndex: number, axis: 'x'|'y'|'z'|'w') => {
     if (Number.isNaN(newOrientation)) return
-    const newWaypoints = [...state.waypoints]
+    const newWaypoints = [...waypoints]
     newWaypoints[waypointIndex] = {
       ...newWaypoints[waypointIndex],
       orientation: {
@@ -54,55 +48,43 @@ const Path = () => {
       }
     }
 
-    setState({
-      ...state,
-      waypoints: newWaypoints,
-    })
+    setWaypoints(newWaypoints)
   }
 
   const setVelocity = (velocity: number, waypointIndex: number) => {
     if (Number.isNaN(velocity)) return
-    const newWaypoints = [...state.waypoints]
+    const newWaypoints = [...waypoints]
     newWaypoints[waypointIndex] = {
       ...newWaypoints[waypointIndex],
       velocity: velocity,
     }
 
-    setState({
-      ...state,
-      waypoints: newWaypoints,
-    })
+    setWaypoints(newWaypoints)
   }
 
   const setHoldTime = (time: number, waypointIndex: number) => {
     if (Number.isNaN(time)) return
-    const newWaypoints = [...state.waypoints]
+    const newWaypoints = [...waypoints]
     newWaypoints[waypointIndex] = {
       ...newWaypoints[waypointIndex],
       hold_time: time,
     }
 
-    setState({
-      ...state,
-      waypoints: newWaypoints,
-    })
+    setWaypoints(newWaypoints)
   }
 
   const deleteWaypoint = (waypointIndex: number) => {
-    const newWaypoints = [...state.waypoints]
+    const newWaypoints = [...waypoints]
     newWaypoints.splice(waypointIndex, 1)
 
-    setState({
-      ...state,
-      waypoints: newWaypoints,
-    })
+    setWaypoints(newWaypoints)
   }
 
   const addWaypoint = () => {
-    const newWaypoints = [...state.waypoints]
+    const newWaypoints = [...waypoints]
     newWaypoints.push({
-      seq: state.waypoints.length + 1,
-      name: `Waypoint ${state.waypoints.length + 1}`,
+      seq: waypoints.length + 1,
+      name: `Waypoint ${waypoints.length + 1}`,
       position: {
         x: 1,
         y: 1,
@@ -118,18 +100,13 @@ const Path = () => {
       hold_time: 0,
     },)
 
-    setState({
-      ...state,
-      waypoints: newWaypoints,
-    })
+    setWaypoints(newWaypoints)
   }
 
   return (
     <div className="flex flex-col items-center gap-2">
       <div className="font-semibold">Waypoints</div>
-      <Table>{
-
-    }
+      <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Sequence</TableHead>
@@ -142,7 +119,7 @@ const Path = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {state.waypoints.map((waypoint, i) => {
+          {waypoints.map((waypoint, i) => {
 
             return (
               <TableRow key={i}>

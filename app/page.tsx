@@ -5,7 +5,7 @@ import {Suspense, useMemo, useRef} from "react";
 import {CameraControls, Environment, KeyboardControls, KeyboardControlsEntry, OrbitControls, Text} from "@react-three/drei";
 import Axis from "@/components/axis"
 import * as THREE from "three";
-import {useStateContext} from "@/components/context";
+import {useStateContext, useWaypointContext} from "@/components/context";
 import Pool from "@/components/pool";
 import Path from "@/components/path";
 import {CameraFlyKeyboard} from "@/components/cameraFlyKeyboard";
@@ -18,7 +18,8 @@ export default function Home() {
 
   const cameraControlsRef = useRef<CameraControls>(null);
 
-  const {state} = useStateContext();
+  const { state } = useStateContext();
+  const { waypoints } = useWaypointContext()
 
   const map = useMemo<KeyboardControlsEntry<Controls>[]>(()=>[
     { name: Controls.forward, keys: ['ArrowUp', 'KeyW'] },
@@ -53,7 +54,7 @@ export default function Home() {
             <Axis poolDimensions={state.poolDimensions} />
             <Pool poolDimensions={state.poolDimensions} />
             <Path />
-            <Guppie position={state.waypoints[state.playbackPosition].position} />
+            <Guppie position={waypoints[state.playbackPosition].position} />
           </Suspense>
         </Canvas>
       </KeyboardControls>
