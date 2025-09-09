@@ -3,7 +3,7 @@
 import {Button} from "@/components/ui/button";
 import {Pause, Play} from "lucide-react";
 import {Slider} from "@/components/ui/slider";
-import {useStateContext, useWaypointContext} from "@/components/context";
+import {useStateContext} from "@/components/context";
 import {GuppieHandle} from "@/components/guppie";
 import {RefObject, useState} from "react";
 
@@ -12,7 +12,6 @@ const Playback = ({ animRef }: { animRef: RefObject<GuppieHandle|null>}) => {
   const [playing, setPlaying] = useState(false);
 
   const { state, setState } = useStateContext()
-  const { waypoints } = useWaypointContext()
 
   const changeAnimState = () => {
     if (!animRef.current) return;
@@ -27,7 +26,8 @@ const Playback = ({ animRef }: { animRef: RefObject<GuppieHandle|null>}) => {
         <Button onClick={changeAnimState} className="cursor-pointer">
           {playing ? <Pause/> : <Play/>}
         </Button>
-        <Slider className="w-[50vw]" min={0} max={waypoints.length - 1} onValueChange={(number) => setState({...state, playbackPosition: number[0]})} />
+        <Slider className="w-[50vw]" min={0} max={state.totalTime} step={0.1} value={[state.totalElapsed]} disabled onValueChange={(number) => setState({...state, elapsed: number[0]})} />
+        <div className="font-mono">{state.totalElapsed.toFixed(2)}s / {state.totalTime.toFixed(2)}s</div>
       </div>
     </div>
   )

@@ -2,8 +2,9 @@ import {Box, Cylinder, Edges, Torus} from "@react-three/drei";
 import {Waypoint} from "@/app/types";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
-import {useRef, useMemo, useState, forwardRef, useImperativeHandle} from "react";
+import {useRef, useMemo, useState, forwardRef, useImperativeHandle, useEffect} from "react";
 import {cartToArray} from "@/lib/cords";
+import {useStateContext} from "@/components/context";
 
 export interface GuppieHandle {
   play: () => void;
@@ -21,6 +22,8 @@ const Guppie = forwardRef<
 >(({ waypoints, loop = false, onIndexChange }, ref) => {
 
   const groupRef = useRef<THREE.Group>(null);
+
+  const { state, setState } = useStateContext();
 
   const timeline = useMemo(() => {
     return waypoints.map((wp, i, arr) => {
@@ -45,9 +48,21 @@ const Guppie = forwardRef<
     }).filter(Boolean);
   }, [waypoints]);
 
-  const [elapsed, setElapsed] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const calcTotalTime = () => {
+      let totalTime = 0;
+      timeline.forEach((i) => {
+        if (!i?.duration) return;
+        totalTime += i?.duration
+      })
+      return totalTime;
+    }
+    setState({...state, totalTime: calcTotalTime()})
+    console.log('fuck')
+  }, [setState, timeline]);
 
   useImperativeHandle(ref, () => ({
     play: () => setIsPlaying(true),
@@ -55,7 +70,7 @@ const Guppie = forwardRef<
     seek: (index: number) => {
       if (index >= 0 && index < timeline.length) {
         setCurrentIndex(index);
-        setElapsed(0);
+        setState({...state, elapsed: 0});
       }
     },
     getIndex: () => currentIndex,
@@ -65,7 +80,8 @@ const Guppie = forwardRef<
   useFrame((_, delta) => {
     if (!groupRef.current || timeline.length === 0 || !isPlaying) return;
 
-    let time = elapsed + delta;
+    let time = state.elapsed + delta;
+    let totalElapsed = state.totalElapsed + delta;
     let segmentIndex = currentIndex;
 
     while (segmentIndex < timeline.length && time > timeline[segmentIndex]!.duration) {
@@ -75,6 +91,7 @@ const Guppie = forwardRef<
       if (segmentIndex >= timeline.length) {
         if (loop) {
           segmentIndex = 0;
+          totalElapsed = 0;
         } else {
           setIsPlaying(false);
           return;
@@ -95,7 +112,7 @@ const Guppie = forwardRef<
     // groupRef.current.quaternion.copy(quat);
 
     // save elapsed relative to this segment
-    setElapsed(time);
+    setState({...state, elapsed: time, totalElapsed: totalElapsed});
   });
 
   return (

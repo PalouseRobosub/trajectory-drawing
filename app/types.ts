@@ -30,7 +30,9 @@ export interface State {
     dotWaypoints: boolean;
     waypointLabels: "none"|"seq"|"name"
   }
-  playbackPosition: number;
+  elapsed: number;
+  totalElapsed: number;
+  totalTime: number;
 }
 
 export enum Controls {
