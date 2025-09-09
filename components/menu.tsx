@@ -7,7 +7,7 @@ import ExportMenu from "@/components/exportMenu";
 import WaypointOptionsMenu from "@/components/waypointOptionsMenu";
 import ImportMenu from "@/components/importMenu";
 
-const Controls = () => {
+const Menu = () => {
 
   return (
     <div className="fixed right-0 h-screen flex flex-col justify-center z-20 pr-2 gap-4">
@@ -67,4 +67,4 @@ const Controls = () => {
   )
 }
 
-export default Controls
+export default Menu

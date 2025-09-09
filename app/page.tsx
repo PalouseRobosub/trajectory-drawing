@@ -10,13 +10,15 @@ import Pool from "@/components/pool";
 import Path from "@/components/path";
 import {CameraFlyKeyboard} from "@/components/cameraFlyKeyboard";
 import {Controls} from "@/app/types";
-import Guppie from "@/components/guppie";
+import Guppie, {GuppieHandle} from "@/components/guppie";
+import Playback from "@/components/playback";
 
 export default function Home() {
 
   THREE.Object3D.DEFAULT_UP = new THREE.Vector3(0, 0, 1);
 
   const cameraControlsRef = useRef<CameraControls>(null);
+  const animRef = useRef<GuppieHandle>(null);
 
   const { state } = useStateContext();
   const { waypoints } = useWaypointContext()
@@ -54,10 +56,18 @@ export default function Home() {
             <Axis poolDimensions={state.poolDimensions} />
             <Pool poolDimensions={state.poolDimensions} />
             <Path />
-            <Guppie position={waypoints[state.playbackPosition].position} />
+            <Guppie ref={animRef}
+                    waypoints={waypoints}
+                    loop={true}
+                    onIndexChange={(i) => console.log("Now at segment index:", i)} />
           </Suspense>
         </Canvas>
       </KeyboardControls>
+      <Playback animRef={animRef} />
+      <div style={{ position: "absolute", top: 10, left: 10 }}>
+        <button onClick={() => animRef.current?.seek(2)}>Seek to index 2</button>
+        <button onClick={() => console.log("Index:", animRef.current?.getIndex())}>Log Index</button>
+      </div>
     </div>
   );
 }
