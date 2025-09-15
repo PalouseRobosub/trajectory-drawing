@@ -4,10 +4,10 @@ import {Button} from "@/components/ui/button";
 import {Pause, Play} from "lucide-react";
 import {Slider} from "@/components/ui/slider";
 import {useStateContext} from "@/components/context";
-import {GuppieHandle} from "@/components/guppie";
 import {RefObject, useState} from "react";
+import {SubHandle} from "@/components/subController";
 
-const Playback = ({ animRef }: { animRef: RefObject<GuppieHandle|null>}) => {
+const Playback = ({ animRef }: { animRef: RefObject<SubHandle|null>}) => {
 
   const [playing, setPlaying] = useState(false);
 

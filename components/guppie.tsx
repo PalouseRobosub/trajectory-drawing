@@ -1,374 +1,604 @@
-import {Box, Cylinder, Edges, Torus} from "@react-three/drei";
+import {Box, Cone, Cylinder, Edges, Torus} from "@react-three/drei";
 import {Waypoint} from "@/app/types";
-import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
-import {useRef, useMemo, useState, forwardRef, useImperativeHandle, useEffect} from "react";
+import {RefObject} from "react";
 import {cartToArray} from "@/lib/cords";
-import {useStateContext} from "@/components/context";
+import * as THREE from "three";
+import {inToM} from "@/lib/conversions";
 
-export interface GuppieHandle {
-  play: () => void;
-  pause: () => void;
-  seek: (index: number) => void;
-  getIndex: () => number;
-  getPlayingState: () => boolean;
+// in INCHES
+const guppieParams = {
+  tubeDiameter: 8,
+  tubeLength: 16.5,
+  platformWidth: 17,
+  platformLength: 19,
+  platformThickness: 0.125,
+  squareScaffoldThickness: 1,
+  skidHeight: 5,
+  thrusterDiameter: 3.9,
+  thrusterLength: 4.45,
+  capThickness: 0.75,
 }
 
-
-// eslint-disable-next-line react/display-name
-const Guppie = forwardRef<
-  GuppieHandle,
-  { waypoints: Waypoint[]; loop?: boolean; onIndexChange?: (i: number) => void }
->(({ waypoints, loop = false, onIndexChange }, ref) => {
-
-  const groupRef = useRef<THREE.Group>(null);
-
-  const { state, setState } = useStateContext();
-
-  const timeline = useMemo(() => {
-    return waypoints.map((wp, i, arr) => {
-      if (i === arr.length - 1) return null;
-
-      const posA = new THREE.Vector3(wp.position.x, wp.position.y, wp.position.z);
-      const posB = new THREE.Vector3(arr[i + 1].position.x, arr[i + 1].position.y, arr[i + 1].position.z);
-
-      // const quatA = new THREE.Quaternion(wp.orientation.x, wp.orientation.y, wp.orientation.z, wp.orientation.w);
-      // const quatB = new THREE.Quaternion(
-      //   arr[i + 1].orientation.x,
-      //   arr[i + 1].orientation.y,
-      //   arr[i + 1].orientation.z,
-      //   arr[i + 1].orientation.w
-      // );
-
-      const distance = posA.distanceTo(posB);
-      const travelTime = distance / wp.velocity;
-      const segmentTime = travelTime + wp.hold_time;
-
-      return { posA, posB, /*quatA, quatB,*/ duration: segmentTime };
-    }).filter(Boolean);
-  }, [waypoints]);
-
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    const calcTotalTime = () => {
-      let totalTime = 0;
-      timeline.forEach((i) => {
-        if (!i?.duration) return;
-        totalTime += i?.duration
-      })
-      return totalTime;
-    }
-    setState({...state, totalTime: calcTotalTime()})
-    console.log('fuck')
-  }, [setState, timeline]);
-
-  useImperativeHandle(ref, () => ({
-    play: () => setIsPlaying(true),
-    pause: () => setIsPlaying(false),
-    seek: (index: number) => {
-      if (index >= 0 && index < timeline.length) {
-        setCurrentIndex(index);
-        setState({...state, elapsed: 0});
-      }
-    },
-    getIndex: () => currentIndex,
-    getPlayingState: () => isPlaying
-  }));
-
-  useFrame((_, delta) => {
-    if (!groupRef.current || timeline.length === 0 || !isPlaying) return;
-
-    let time = state.elapsed + delta;
-    let totalElapsed = state.totalElapsed + delta;
-    let segmentIndex = currentIndex;
-
-    while (segmentIndex < timeline.length && time > timeline[segmentIndex]!.duration) {
-      time -= timeline[segmentIndex]!.duration;
-      segmentIndex++;
-
-      if (segmentIndex >= timeline.length) {
-        if (loop) {
-          segmentIndex = 0;
-          totalElapsed = 0;
-        } else {
-          setIsPlaying(false);
-          return;
-        }
-      }
-
-      setCurrentIndex(segmentIndex);
-      onIndexChange?.(segmentIndex);
-    }
-
-    const { posA, posB,/*quatA, quatB,*/ duration } = timeline[segmentIndex]!;
-    const t = Math.min(time / duration, 1);
-
-    const pos = new THREE.Vector3().lerpVectors(posA, posB, t);
-    // const quat = new THREE.Quaternion().copy(quatA).slerp(quatB, t);
-
-    groupRef.current.position.copy(pos);
-    // groupRef.current.quaternion.copy(quat);
-
-    // save elapsed relative to this segment
-    setState({...state, elapsed: time, totalElapsed: totalElapsed});
-  });
+const T200 = ({ position, rotation }: { position: [number, number, number], rotation: [number, number, number] }) => {
 
   return (
-    <group ref={groupRef} position={cartToArray(waypoints[0].position)}>
-      <group position={[-0.172, 0, 0.184]}>
-        <Cylinder
-          args={[0.17, 0.17, 0.03, 64]}
-          position={[0, 0.315, 0]}
+    <group
+      position={position}
+      rotation={rotation}
+    >
+
+      {/* front cone */}
+      <Cone
+        args={[
+          inToM(1.25),
+          inToM(guppieParams.thrusterLength) * 0.2,
+        ]}
+        position={[
+          0,
+          inToM(guppieParams.thrusterLength) * 0.5,
+          0
+        ]}
+      >
+        <meshBasicMaterial color="black" />
+        <Edges color="white" />
+      </Cone>
+
+      {/* front center */}
+      <Cylinder
+        args={[
+          inToM(1.25),
+          inToM(1.25),
+          inToM(guppieParams.thrusterLength) * 0.2,
+        ]}
+        position={[
+          0,
+          inToM(guppieParams.thrusterLength) * 0.3,
+          0
+        ]}
+      >
+        <meshBasicMaterial color="black" />
+        <Edges color="white" />
+      </Cylinder>
+
+      {/* shroud */}
+      <Cylinder
+        args={[
+          inToM(guppieParams.thrusterDiameter) / 2,
+          inToM(guppieParams.thrusterDiameter) / 2,
+          inToM(guppieParams.thrusterLength) * 0.4,
+          undefined,
+          undefined,
+          true
+        ]}
+      >
+        <meshBasicMaterial color="black" side={THREE.DoubleSide} />
+        <Edges color="white" />
+      </Cylinder>
+
+      {/* center */}
+      <Cylinder
+        args={[
+          inToM(1.25),
+          inToM(1.25),
+          inToM(guppieParams.thrusterLength) * 0.4,
+        ]}
+      >
+        <meshBasicMaterial color="steelblue" />
+        <Edges color="white" />
+
+        {/* blade */}
+        <Box
+          args={[
+            inToM(1),
+            inToM(0.25),
+            inToM(guppieParams.thrusterDiameter) * 0.45,
+          ]}
+          rotation={[
+            0,
+            0,
+            Math.PI/4,
+          ]}
+          position={[
+            0,
+            0,
+            inToM(guppieParams.thrusterDiameter) / 4,
+          ]}
         >
-          <meshPhysicalMaterial
-            color="#ffffff"
-            metalness={1}
-            roughness={0.08}
-            reflectivity={0.9}
-            clearcoat={0.5}
-            clearcoatRoughness={0.05}
-            envMapIntensity={1.3}
-            transmission={0}
-          />
-          <Edges color="black" />
-        </Cylinder>
-        <Cylinder
-          args={[0.17, 0.17, 0.6, 64]}
+          <meshBasicMaterial color="steelblue" />
+          <Edges color="white" />
+        </Box>
+
+        {/* blade */}
+        <Box
+          args={[
+            inToM(1),
+            inToM(0.25),
+            inToM(guppieParams.thrusterDiameter) * 0.45,
+          ]}
+          rotation={[
+            0,
+            2*Math.PI/3,
+            Math.PI/4,
+          ]}
+          position={[
+            inToM(guppieParams.thrusterDiameter) * 0.125 * Math.sqrt(3),
+            0,
+            -inToM(guppieParams.thrusterDiameter) * 0.125,
+          ]}
         >
-          <meshStandardMaterial color="white" transparent={true} opacity={0.4} />
-          <Edges color="black" />
-        </Cylinder>
+          <meshBasicMaterial color="steelblue" />
+          <Edges color="white" />
+        </Box>
+
+        {/* blade */}
+        <Box
+          args={[
+            inToM(1),
+            inToM(0.25),
+            inToM(guppieParams.thrusterDiameter) * 0.45,
+          ]}
+          rotation={[
+            0,
+            4*Math.PI/3,
+            Math.PI/4,
+          ]}
+          position={[
+            -inToM(guppieParams.thrusterDiameter) * 0.125 * Math.sqrt(3),
+            0,
+            -inToM(guppieParams.thrusterDiameter) * 0.125,
+          ]}
+        >
+          <meshBasicMaterial color="steelblue" />
+          <Edges color="white" />
+        </Box>
+      </Cylinder>
+
+      {/* rear cone */}
+      <Cone
+        args={[
+          inToM(1.25),
+          inToM(guppieParams.thrusterLength) * 0.2,
+        ]}
+        rotation={[
+          Math.PI,
+          0,
+          0
+        ]}
+        position={[
+          0,
+          -inToM(guppieParams.thrusterLength) * 0.3,
+          0
+        ]}
+      >
+        <meshBasicMaterial color="black" />
+        <Edges color="white" />
+      </Cone>
+    </group>
+  )
+}
+
+const Hull = ({ position }: { position: [number, number, number]}) => {
+  return (
+    <group
+      position={position}
+    >
+
+      {/* f hull cap */}
+      <Cylinder
+        args={[
+          inToM(guppieParams.tubeDiameter) / 2,
+          inToM(guppieParams.tubeDiameter) / 2,
+          inToM(guppieParams.capThickness),
+          64
+        ]}
+        position={[
+          0,
+          (inToM(guppieParams.tubeLength) / 2 + inToM(guppieParams.capThickness) / 2),
+          0
+        ]}
+      >
+        <meshBasicMaterial color="gray" />
+        <Edges color="black" />
+      </Cylinder>
+
+      {/* main hull body */}
+      <Cylinder
+        args={[
+          inToM(guppieParams.tubeDiameter)/2,
+          inToM(guppieParams.tubeDiameter)/2,
+          inToM(guppieParams.tubeLength),
+          64
+        ]}
+      >
+        <meshStandardMaterial color="white" transparent={true} opacity={0.4} />
+        <Edges color="black" />
         <Torus
-          args={[0.16, 0.01, 4]}
+          args={[
+            inToM(guppieParams.tubeDiameter) / 2 - 0.01,
+            0.01,
+            4
+          ]}
           rotation={[Math.PI/2, 0, 0]}
           scale={[1, 1, 1]}
-          position={[0, -0.225, 0]}
+          position={[
+            0,
+            -inToM(guppieParams.tubeLength) * 0.375,
+            0
+          ]}
         >
           <meshBasicMaterial color="red" />
         </Torus>
         <Torus
-          args={[0.16, 0.01, 4]}
+          args={[
+            inToM(guppieParams.tubeDiameter) / 2 - 0.01,
+            0.01,
+            4
+          ]}
           rotation={[Math.PI/2, 0, 0]}
           scale={[1, 1, 1]}
-          position={[0, -0.075, 0]}
+          position={[
+            0,
+            -inToM(guppieParams.tubeLength) * 0.125,
+            0
+          ]}
         >
           <meshBasicMaterial color="red" />
         </Torus>
         <Torus
-          args={[0.16, 0.01, 4]}
+          args={[
+            inToM(guppieParams.tubeDiameter) / 2 - 0.01,
+            0.01,
+            4
+          ]}
           rotation={[Math.PI/2, 0, 0]}
           scale={[1, 1, 1]}
-          position={[0, 0.075, 0]}
+          position={[
+            0,
+            inToM(guppieParams.tubeLength) * 0.125,
+            0
+          ]}
         >
           <meshBasicMaterial color="red" />
         </Torus>
         <Torus
-          args={[0.16, 0.01, 4]}
+          args={[
+            inToM(guppieParams.tubeDiameter) / 2 - 0.01,
+            0.01,
+            4
+          ]}
           rotation={[Math.PI/2, 0, 0]}
           scale={[1, 1, 1]}
-          position={[0, 0.225, 0]}
+          position={[
+            0,
+            inToM(guppieParams.tubeLength) * 0.375,
+            0
+          ]}
         >
           <meshBasicMaterial color="red" />
         </Torus>
-        <Cylinder
-          args={[0.17, 0.17, 0.03, 64]}
-          position={[0, -0.315, 0]}
-        >
-          <meshPhysicalMaterial
-            color="#ffffff"
-            metalness={1}
-            roughness={0.08}
-            reflectivity={0.9}
-            clearcoat={0.5}
-            clearcoatRoughness={0.05}
-            envMapIntensity={1.3}
-            transmission={0}
-          />
-          <Edges color="black" />
-        </Cylinder>
+      </Cylinder>
+
+      {/* r hull cap */}
+      <Cylinder
+        args={[
+          inToM(guppieParams.tubeDiameter) / 2,
+          inToM(guppieParams.tubeDiameter) / 2,
+          inToM(guppieParams.capThickness),
+          64
+        ]}
+        position={[
+          0,
+          -(inToM(guppieParams.tubeLength) / 2 + inToM(guppieParams.capThickness) / 2),
+          0
+        ]}
+      >
+        <meshBasicMaterial color="gray" />
+        <Edges color="black" />
+      </Cylinder>
+
+    </group>
+  )
+}
+
+const Guppie = ({ ref, startPos }: { ref: RefObject<THREE.Group|null>, startPos: Waypoint["position"]}) => {
+
+  return (
+    //  guppie parent group
+    <group position={cartToArray(startPos)} ref={ref}>
+
+      {/* hulls */}
+      <group
+        position={[
+          0,
+          0,
+          (inToM(guppieParams.tubeDiameter/2) + inToM(guppieParams.platformThickness) / 2)
+        ]}
+      >
+
+        {/* left hull */}
+        <Hull
+          position={[
+            -inToM(guppieParams.tubeDiameter/2),
+            0,
+            0
+          ]}
+        />
+
+        {/* right hull */}
+        <Hull
+          position={[
+            inToM(guppieParams.tubeDiameter/2),
+            0,
+            0
+          ]}
+        />
+
       </group>
-      <group position={[0.172, 0, 0.184]}>
-        <Cylinder
-          args={[0.17, 0.17, 0.03, 64]}
-          position={[0, 0.315, 0]}
-        >
-          <meshPhysicalMaterial
-            color="#ffffff"
-            metalness={1}
-            roughness={0.08}
-            reflectivity={0.9}
-            clearcoat={0.5}
-            clearcoatRoughness={0.05}
-            envMapIntensity={1.3}
-            transmission={0}
-          />
-          <Edges color="black" />
-        </Cylinder>
-        <Cylinder
-          args={[0.17, 0.17, 0.6, 64]}
-        >
-          <meshStandardMaterial color="white" transparent={true} opacity={0.4} />
-          <Edges color="black" />
-        </Cylinder>
-        <Torus
-          args={[0.16, 0.01, 4]}
-          rotation={[Math.PI/2, 0, 0]}
-          scale={[1, 1, 1]}
-          position={[0, -0.225, 0]}
-        >
-          <meshBasicMaterial color="red" />
-        </Torus>
-        <Torus
-          args={[0.16, 0.01, 4]}
-          rotation={[Math.PI/2, 0, 0]}
-          scale={[1, 1, 1]}
-          position={[0, -0.075, 0]}
-        >
-          <meshBasicMaterial color="red" />
-        </Torus>
-        <Torus
-          args={[0.16, 0.01, 4]}
-          rotation={[Math.PI/2, 0, 0]}
-          scale={[1, 1, 1]}
-          position={[0, 0.075, 0]}
-        >
-          <meshBasicMaterial color="red" />
-        </Torus>
-        <Torus
-          args={[0.16, 0.01, 4]}
-          rotation={[Math.PI/2, 0, 0]}
-          scale={[1, 1, 1]}
-          position={[0, 0.225, 0]}
-        >
-          <meshBasicMaterial color="red" />
-        </Torus>
-        <Cylinder
-          args={[0.17, 0.17, 0.03, 64]}
-          position={[0, -0.315, 0]}
-        >
-          <meshPhysicalMaterial
-            color="#ffffff"
-            metalness={1}
-            roughness={0.08}
-            reflectivity={0.9}
-            clearcoat={0.5}
-            clearcoatRoughness={0.05}
-            envMapIntensity={1.3}
-            transmission={0}
-          />
-          <Edges color="black" />
-        </Cylinder>
-      </group>
+
+      {/* main platform */}
       <Box
-        args={[0.7, 0.7, 0.025]}
+        args={[
+          inToM(guppieParams.platformWidth),
+          inToM(guppieParams.platformLength),
+          inToM(guppieParams.platformThickness),
+        ]}
       >
         <meshBasicMaterial color="white" />
         <Edges color="black" />
       </Box>
+
+      {/* skid assembly group */}
       <group
-        position={[0, 0, -0.1125]}
+        position={[
+          0,
+          0,
+          -((inToM(guppieParams.skidHeight) / 2) + (inToM(guppieParams.platformThickness) / 2))
+        ]}
       >
-        <Box
-          args={[0.05, 0.05, 0.2]}
-          position={[0.325, 0.325, 0]}
+
+        {/* front skid assembly group */}
+        <group
+          position={[
+            0,
+            ((inToM(guppieParams.platformLength) / 2) - (inToM(guppieParams.squareScaffoldThickness) / 2)),
+            0,
+          ]}
         >
-          <meshPhysicalMaterial
-            color="#ffffff"
-            metalness={1}
-            roughness={0.08}
-            reflectivity={0.9}
-            clearcoat={0.5}
-            clearcoatRoughness={0.05}
-            envMapIntensity={1.3}
-            transmission={0}
-          />
-          <Edges color="black" />
-        </Box>
-        <Box
-          args={[0.05, 0.05, 0.2]}
-          position={[-0.325, 0.325, 0]}
+
+          {/* fr vertical scaffold */}
+          <Box
+            args={[
+              inToM(guppieParams.squareScaffoldThickness),
+              inToM(guppieParams.squareScaffoldThickness),
+              inToM(guppieParams.skidHeight)
+            ]}
+            position={[
+              ((inToM(guppieParams.platformWidth) / 2) - (inToM(guppieParams.squareScaffoldThickness) / 2)),
+              0,
+              0
+            ]}
+          >
+            <meshBasicMaterial color="gray" />
+            <Edges color="black" />
+          </Box>
+
+          {/* fl vertical scaffold */}
+          <Box
+            args={[
+              inToM(guppieParams.squareScaffoldThickness),
+              inToM(guppieParams.squareScaffoldThickness),
+              inToM(guppieParams.skidHeight)
+            ]}
+            position={[
+              -((inToM(guppieParams.platformWidth) / 2) - (inToM(guppieParams.squareScaffoldThickness) / 2)),
+              0,
+              0
+            ]}
+          >
+            <meshBasicMaterial color="gray" />
+            <Edges color="black" />
+          </Box>
+
+          {/* front horizontal scaffold */}
+          <Box
+            args={[
+              inToM(guppieParams.platformWidth),
+              inToM(guppieParams.squareScaffoldThickness),
+              inToM(guppieParams.squareScaffoldThickness),
+            ]}
+            position={[
+              0,
+              0,
+              -(inToM(guppieParams.skidHeight) / 2 - inToM(guppieParams.squareScaffoldThickness) / 2),
+            ]}
+          >
+            <meshBasicMaterial color="gray" />
+            <Edges color="black" />
+          </Box>
+        </group>
+
+        {/* rear skid assembly group */}
+        <group
+          position={[
+            0,
+            -((inToM(guppieParams.platformLength) / 2) - (inToM(guppieParams.squareScaffoldThickness) / 2)),
+            0
+          ]}
         >
-          <meshPhysicalMaterial
-            color="#ffffff"
-            metalness={1}
-            roughness={0.08}
-            reflectivity={0.9}
-            clearcoat={0.5}
-            clearcoatRoughness={0.05}
-            envMapIntensity={1.3}
-            transmission={0}
-          />
-          <Edges color="black" />
-        </Box>
-        <Box
-          args={[0.05, 0.05, 0.2]}
-          position={[0.325, -0.325, 0]}
-        >
-          <meshPhysicalMaterial
-            color="#ffffff"
-            metalness={1}
-            roughness={0.08}
-            reflectivity={0.9}
-            clearcoat={0.5}
-            clearcoatRoughness={0.05}
-            envMapIntensity={1.3}
-            transmission={0}
-          />
-          <Edges color="black" />
-        </Box>
-        <Box
-          args={[0.05, 0.05, 0.2]}
-          position={[-0.325, -0.325, 0]}
-        >
-          <meshPhysicalMaterial
-            color="#ffffff"
-            metalness={1}
-            roughness={0.08}
-            reflectivity={0.9}
-            clearcoat={0.5}
-            clearcoatRoughness={0.05}
-            envMapIntensity={1.3}
-            transmission={0}
-          />
-          <Edges color="black" />
-        </Box>
-        <Box
-          args={[0.7, 0.05, 0.05]}
-          position={[0, 0.325, -0.075]}
-        >
-          <meshPhysicalMaterial
-            color="#ffffff"
-            metalness={1}
-            roughness={0.08}
-            reflectivity={0.9}
-            clearcoat={0.5}
-            clearcoatRoughness={0.05}
-            envMapIntensity={1.3}
-            transmission={0}
-          />
-          <Edges color="black" />
-        </Box>
-        <Box
-          args={[0.7, 0.05, 0.05]}
-          position={[0, -0.325, -0.075]}
-        >
-          <meshPhysicalMaterial
-            color="#ffffff"
-            metalness={1}
-            roughness={0.08}
-            reflectivity={0.9}
-            clearcoat={0.5}
-            clearcoatRoughness={0.05}
-            envMapIntensity={1.3}
-            transmission={0}
-          />
-          <Edges color="black" />
-        </Box>
+
+          {/* rr vertical scaffold */}
+          <Box
+            args={[
+              inToM(guppieParams.squareScaffoldThickness),
+              inToM(guppieParams.squareScaffoldThickness),
+              inToM(guppieParams.skidHeight)
+            ]}
+            position={[
+              ((inToM(guppieParams.platformWidth) / 2) - (inToM(guppieParams.squareScaffoldThickness) / 2)),
+              0,
+              0
+            ]}
+          >
+            <meshBasicMaterial color="gray" />
+            <Edges color="black" />
+          </Box>
+
+          {/* rl vertical scaffold */}
+          <Box
+            args={[
+              inToM(guppieParams.squareScaffoldThickness),
+              inToM(guppieParams.squareScaffoldThickness),
+              inToM(guppieParams.skidHeight)
+            ]}
+            position={[
+              -((inToM(guppieParams.platformWidth) / 2) - (inToM(guppieParams.squareScaffoldThickness) / 2)),
+              0,
+              0
+            ]}
+          >
+            <meshBasicMaterial color="gray" />
+            <Edges color="black" />
+          </Box>
+
+          {/* rear horizontal scaffold */}
+          <Box
+            args={[
+              inToM(guppieParams.platformWidth),
+              inToM(guppieParams.squareScaffoldThickness),
+              inToM(guppieParams.squareScaffoldThickness),
+            ]}
+            position={[
+              0,
+              0,
+              -(inToM(guppieParams.skidHeight) / 2 - inToM(guppieParams.squareScaffoldThickness) / 2),
+            ]}
+          >
+            <meshBasicMaterial color="gray" />
+            <Edges color="black" />
+          </Box>
+        </group>
+
       </group>
+
+      {/* thrusters */}
+      <>
+
+        {/* front-right */}
+        <T200
+          position={[
+            inToM(guppieParams.platformWidth) / 2 + inToM(guppieParams.thrusterDiameter) / (2 * Math.sqrt(2)),
+            inToM(guppieParams.platformLength) / 2 + inToM(guppieParams.thrusterDiameter) / (2 * Math.sqrt(2)),
+            0
+          ]}
+          rotation={[
+            0,
+            0,
+            Math.PI/4,
+          ]}
+        />
+
+        {/* front-left */}
+        <T200
+          position={[
+            -inToM(guppieParams.platformWidth) / 2 - inToM(guppieParams.thrusterDiameter) / (2 * Math.sqrt(2)),
+            inToM(guppieParams.platformLength) / 2 + inToM(guppieParams.thrusterDiameter) / (2 * Math.sqrt(2)),
+            0
+          ]}
+          rotation={[
+            0,
+            0,
+            -Math.PI/4,
+          ]}
+        />
+
+        {/* rear-right */}
+        <T200
+          position={[
+            inToM(guppieParams.platformWidth) / 2 + inToM(guppieParams.thrusterDiameter) / (2 * Math.sqrt(2)),
+            -inToM(guppieParams.platformLength) / 2 - inToM(guppieParams.thrusterDiameter) / (2 * Math.sqrt(2)),
+            0
+          ]}
+          rotation={[
+            0,
+            0,
+            3*Math.PI/4,
+          ]}
+        />
+
+        {/* rear-left */}
+        <T200
+          position={[
+            -inToM(guppieParams.platformWidth) / 2 - inToM(guppieParams.thrusterDiameter) / (2 * Math.sqrt(2)),
+            -inToM(guppieParams.platformLength) / 2 - inToM(guppieParams.thrusterDiameter) / (2 * Math.sqrt(2)),
+            0
+          ]}
+          rotation={[
+            0,
+            0,
+            -3*Math.PI/4,
+          ]}
+        />
+
+        {/* front-center */}
+        <T200
+          position={[
+            0,
+            inToM(guppieParams.platformLength) / 2 + inToM(guppieParams.thrusterDiameter) / 2,
+            0
+          ]}
+          rotation={[
+            Math.PI/2,
+            0,
+            0,
+          ]}
+        />
+
+        {/* rear-center */}
+        <T200
+          position={[
+            0,
+            -inToM(guppieParams.platformLength) / 2 - inToM(guppieParams.thrusterDiameter) / 2,
+            0
+          ]}
+          rotation={[
+            Math.PI/2,
+            0,
+            0,
+          ]}
+        />
+
+        {/* right-center */}
+        <T200
+          position={[
+            inToM(guppieParams.platformWidth) / 2 + inToM(guppieParams.thrusterDiameter) / 2,
+            0,
+            0
+          ]}
+          rotation={[
+            Math.PI/2,
+            0,
+            0,
+          ]}
+        />
+
+        {/* left-center */}
+        <T200
+          position={[
+            -inToM(guppieParams.platformWidth) / 2 - inToM(guppieParams.thrusterDiameter) / 2,
+            0,
+            0
+          ]}
+          rotation={[
+            Math.PI/2,
+            0,
+            0,
+          ]}
+        />
+
+      </>
+
     </group>
   )
-});
+};
 
 export default Guppie

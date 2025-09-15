@@ -2,7 +2,7 @@
 
 import {Canvas} from "@react-three/fiber";
 import {Suspense, useMemo, useRef} from "react";
-import {CameraControls, Environment, KeyboardControls, KeyboardControlsEntry, OrbitControls, Text} from "@react-three/drei";
+import {CameraControls, KeyboardControls, KeyboardControlsEntry, OrbitControls, Text} from "@react-three/drei";
 import Axis from "@/components/axis"
 import * as THREE from "three";
 import {useStateContext, useWaypointContext} from "@/components/context";
@@ -10,15 +10,16 @@ import Pool from "@/components/pool";
 import Path from "@/components/path";
 import {CameraFlyKeyboard} from "@/components/cameraFlyKeyboard";
 import {Controls} from "@/app/types";
-import Guppie, {GuppieHandle} from "@/components/guppie";
+import Guppie from "@/components/guppie";
 import Playback from "@/components/playback";
+import SubController, {SubHandle} from "@/components/subController";
 
 export default function Home() {
 
   THREE.Object3D.DEFAULT_UP = new THREE.Vector3(0, 0, 1);
 
   const cameraControlsRef = useRef<CameraControls>(null);
-  const animRef = useRef<GuppieHandle>(null);
+  const animRef = useRef<SubHandle>(null);
 
   const { state } = useStateContext();
   const { waypoints } = useWaypointContext()
@@ -47,7 +48,6 @@ export default function Home() {
               </Text>
             }
           >
-            <Environment preset="warehouse" background={false} />
             <OrbitControls />
             <CameraControls ref={cameraControlsRef} />
             <CameraFlyKeyboard cameraControlsRef={cameraControlsRef}/>
@@ -56,7 +56,9 @@ export default function Home() {
             <Axis poolDimensions={state.poolDimensions} />
             <Pool poolDimensions={state.poolDimensions} />
             <Path />
-            <Guppie ref={animRef}
+            {/* @ts-expect-error temporary test*/}
+            <Guppie ref={null} startPos={{ x: -1, y: -1, z: 0 }} />
+            <SubController ref={animRef}
                     waypoints={waypoints}
                     loop={true}
                     onIndexChange={(i) => console.log("Now at segment index:", i)} />
