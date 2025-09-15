@@ -10,7 +10,6 @@ import Pool from "@/components/pool";
 import Path from "@/components/path";
 import {CameraFlyKeyboard} from "@/components/cameraFlyKeyboard";
 import {Controls} from "@/app/types";
-import Guppie from "@/components/guppie";
 import Playback from "@/components/playback";
 import SubController, {SubHandle} from "@/components/subController";
 
@@ -56,8 +55,6 @@ export default function Home() {
             <Axis poolDimensions={state.poolDimensions} />
             <Pool poolDimensions={state.poolDimensions} />
             <Path />
-            {/* @ts-expect-error temporary test*/}
-            <Guppie ref={null} startPos={{ x: -1, y: -1, z: 0 }} />
             <SubController ref={animRef}
                     waypoints={waypoints}
                     loop={true}
