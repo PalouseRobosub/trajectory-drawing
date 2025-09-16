@@ -1,8 +1,7 @@
-import {Waypoint} from "@/app/types";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
-import {useRef, useMemo, useState, forwardRef, useImperativeHandle, useEffect} from "react";
-import {useStateContext} from "@/components/context";
+import {useRef, useMemo, useState, useImperativeHandle, useEffect, RefObject} from "react";
+import {useStateContext, useWaypointContext} from "@/components/context";
 import Guppie from "@/components/guppie";
 
 export interface SubHandle {
@@ -13,15 +12,11 @@ export interface SubHandle {
   getPlayingState: () => boolean;
 }
 
-
-// eslint-disable-next-line react/display-name
-const SubController = forwardRef<
-  SubHandle,
-  { waypoints: Waypoint[]; loop?: boolean; onIndexChange?: (i: number) => void }
->(({ waypoints, loop = false, onIndexChange }, ref) => {
+const SubController = ({ ref, loop }: { ref: RefObject<SubHandle|null>, loop: boolean }) => {
 
   const groupRef = useRef<THREE.Group>(null);
 
+  const { waypoints } = useWaypointContext();
   const { state, setState } = useStateContext();
 
   const timeline = useMemo(() => {
@@ -61,7 +56,6 @@ const SubController = forwardRef<
       return totalTime;
     }
     setState({...state, totalTime: calcTotalTime()})
-    console.log('fuck')
   }, [setState, timeline]);
 
   useImperativeHandle(ref, () => ({
@@ -99,7 +93,6 @@ const SubController = forwardRef<
       }
 
       setCurrentIndex(segmentIndex);
-      onIndexChange?.(segmentIndex);
     }
 
     const { posA, posB, quatA, quatB, duration } = timeline[segmentIndex]!;
@@ -118,6 +111,6 @@ const SubController = forwardRef<
   return (
     <Guppie ref={groupRef} startPos={waypoints[0].position} />
   )
-});
+};
 
 export default SubController

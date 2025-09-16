@@ -5,7 +5,7 @@ import {Suspense, useMemo, useRef} from "react";
 import {CameraControls, KeyboardControls, KeyboardControlsEntry, OrbitControls, Text} from "@react-three/drei";
 import Axis from "@/components/axis"
 import * as THREE from "three";
-import {useStateContext, useWaypointContext} from "@/components/context";
+import {useStateContext} from "@/components/context";
 import Pool from "@/components/pool";
 import Path from "@/components/path";
 import {CameraFlyKeyboard} from "@/components/cameraFlyKeyboard";
@@ -21,7 +21,6 @@ export default function Home() {
   const animRef = useRef<SubHandle>(null);
 
   const { state } = useStateContext();
-  const { waypoints } = useWaypointContext()
 
   const map = useMemo<KeyboardControlsEntry<Controls>[]>(()=>[
     { name: Controls.forward, keys: ['ArrowUp', 'KeyW'] },
@@ -55,10 +54,10 @@ export default function Home() {
             <Axis poolDimensions={state.poolDimensions} />
             <Pool poolDimensions={state.poolDimensions} />
             <Path />
-            <SubController ref={animRef}
-                    waypoints={waypoints}
-                    loop={true}
-                    onIndexChange={(i) => console.log("Now at segment index:", i)} />
+            <SubController
+              ref={animRef}
+              loop={true}
+            />
           </Suspense>
         </Canvas>
       </KeyboardControls>

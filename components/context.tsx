@@ -1,6 +1,6 @@
 'use client'
 
-import {createContext, useContext, useState} from "react";
+import {createContext, useContext, useEffect, useState} from "react";
 import {State, Waypoint} from "@/app/types";
 
 const defaultWaypoints: Waypoint[] = [
@@ -77,6 +77,25 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
 
   const [state, setState] = useState<State>(defaultState)
   const [waypoints, setWaypoints] = useState<Waypoint[]>(defaultWaypoints)
+  const [loadedWaypoints, setLoadedWaypoints] = useState(false)
+
+  useEffect(() => {
+    const storedWaypoints = JSON.parse(localStorage.getItem("waypoints") as string);
+    if (storedWaypoints) {
+      setWaypoints(storedWaypoints);
+    } else {
+      setWaypoints(defaultWaypoints);
+    }
+    setLoadedWaypoints(true)
+  }, []);
+
+  useEffect(() => {
+    if (loadedWaypoints) localStorage.setItem('waypoints', JSON.stringify(waypoints));
+  }, [loadedWaypoints, waypoints]);
+
+  useEffect(() => {
+    console.log("state changed")
+  }, [state]);
 
   return (
     <stateContext.Provider value={{ state, setState }}>

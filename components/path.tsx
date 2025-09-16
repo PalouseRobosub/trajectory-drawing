@@ -22,7 +22,7 @@ const Path = () => {
                 </Text>
               </Billboard>}
               {state.waypointOptions.dotWaypoints && <Sphere
-                args={[0.1]}
+                args={[0.06]}
                 position={cartToArray(waypoint.position)}
               >
                 <meshBasicMaterial color="red"/>
@@ -34,7 +34,7 @@ const Path = () => {
           <group key={i}>
             <Line points={[cartToArray(waypoint.position), cartToArray(waypoints[i+1].position)]} color="rebeccapurple" lineWidth={4} />
             {state.waypointOptions.dotWaypoints && <Sphere
-              args={[0.1]}
+              args={[0.06]}
               position={cartToArray(waypoint.position)}
             >
               <meshBasicMaterial color={`${i === 0 ? "green" : "black"}`}/>
