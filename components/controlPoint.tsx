@@ -1,10 +1,9 @@
 import {Cone, DragControls, Edges, Line, Outlines, Plane, Sphere} from "@react-three/drei";
 import {useStateContext, useWaypointContext} from "@/components/context";
 import * as THREE from "three";
-import {use, useRef, useState} from "react";
-import {Group, Mesh} from "three";
+import {useEffect, useRef, useState} from "react";
+import {Group, Mesh, Vector3} from "three";
 import {CartesianCoords} from "@/app/types";
-import {cartToArray} from "@/lib/cords";
 
 type AxisLimits = [[number, number] | undefined, [number, number] | undefined, [number, number] | undefined] | undefined
 
@@ -15,7 +14,16 @@ const ControlPoint = ({ startPos, waypointIndex }: { startPos: CartesianCoords, 
   const [activeDrag, setActiveDrag] = useState<boolean>(false);
   const [dragLimits, setDragLimits] = useState<AxisLimits>(undefined);
   const dragRef = useRef<Group>(null);
-  const pointRef = useRef<Mesh>(null);
+  const sphereRef = useRef<Mesh>(null);
+
+  useEffect(() => {
+    if (!sphereRef.current) return;
+    const position = waypoints[waypointIndex].controlPoint;
+    const vector = new Vector3(position.x, position.y, position.z);
+    sphereRef.current.position.copy(vector);
+    console.log(new Vector3().setFromMatrixPosition(sphereRef.current.matrix));
+    console.log(sphereRef.current.position);
+  }, [])
 
   const updatePos = () => {
     if (!dragRef.current) return;
@@ -48,7 +56,10 @@ const ControlPoint = ({ startPos, waypointIndex }: { startPos: CartesianCoords, 
 
     setDragLimits(limits)
   }
-
+  //FIXME NEED TO SUBTRACT FROM MATRIX POSITION INSTEAD OF RESET
+  //FIXME USE DELTA OR OROGINAL POSITION
+  //FIXME DRAGGABLE PROBABLE ADDING DELTA RATHER THAN CHANGING POSITION ABSOLUTELY
+  //FIXME PROBABLY ONDRAGEND
   return (
     <DragControls
       ref={dragRef}
@@ -61,16 +72,20 @@ const ControlPoint = ({ startPos, waypointIndex }: { startPos: CartesianCoords, 
         setActiveDrag(false)
         setDragLimits(undefined);
         updatePos();
-      }}
-      onDrag={(matrix) => {
-        const vector = new THREE.Vector3();
-        vector.setFromMatrixPosition(matrix);
+        if (!sphereRef.current) return;
+        console.log(sphereRef.current.matrix);
+
+        //FIXME TEMP
+        sphereRef.current.position.set(0, 0, 0);
+
+        //FIXME LOGS THE ORIGINAL OFFSET AFTER A TRANSFORM
+        console.log(new Vector3().setFromMatrixPosition(sphereRef.current.matrix));
       }}
       dragLimits={dragLimits}
     >
 
       <Sphere
-        ref={pointRef}
+        ref={sphereRef}
         raycast={() => null}
         args={[0.06]}
       >
