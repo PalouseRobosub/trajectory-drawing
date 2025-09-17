@@ -11,6 +11,12 @@ const defaultWaypoints: Waypoint[] = [
     orientation: { x: 0, y: 0, z: 0, w: 1 },
     velocity: 1,
     hold_time: 0,
+    bezier: true,
+    controlPoint: {
+      x: 0,
+      y: 0,
+      z: 0,
+    }
   },
   {
     seq: 2,
@@ -19,6 +25,12 @@ const defaultWaypoints: Waypoint[] = [
     orientation: { x: 0, y: 0, z: 0, w: 1 },
     velocity: 1,
     hold_time: 0,
+    bezier: false,
+    controlPoint: {
+      x: 0,
+      y: 0,
+      z: 0,
+    }
   },
   {
     seq: 3,
@@ -27,6 +39,12 @@ const defaultWaypoints: Waypoint[] = [
     orientation: { x: 0, y: 0, z: 0, w: 1 },
     velocity: 1,
     hold_time: 0,
+    bezier: false,
+    controlPoint: {
+      x: 0,
+      y: 0,
+      z: 0,
+    }
   },
   {
     seq: 4,
@@ -35,6 +53,12 @@ const defaultWaypoints: Waypoint[] = [
     orientation: { x: 0, y: 0, z: 0, w: 1 },
     velocity: 1,
     hold_time: 0,
+    bezier: false,
+    controlPoint: {
+      x: 0,
+      y: 0,
+      z: 0,
+    }
   },
   {
     seq: 5,
@@ -43,6 +67,12 @@ const defaultWaypoints: Waypoint[] = [
     orientation: { x: 0, y: 0, z: 0, w: 1 },
     velocity: 1,
     hold_time: 0,
+    bezier: false,
+    controlPoint: {
+      x: 0,
+      y: 0,
+      z: 0,
+    }
   },
   {
     seq: 6,
@@ -51,6 +81,12 @@ const defaultWaypoints: Waypoint[] = [
     orientation: { x: 0, y: 0, z: 0, w: 1 },
     velocity: 1,
     hold_time: 0,
+    bezier: false,
+    controlPoint: {
+      x: 0,
+      y: 0,
+      z: 0,
+    }
   },
 ];
 
@@ -66,7 +102,8 @@ const defaultState: State = {
   },
   elapsed: 0,
   totalElapsed: 0,
-  totalTime: 0
+  totalTime: 0,
+  orbitEnabled: true,
 }
 
 const stateContext = createContext({})

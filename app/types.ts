@@ -22,6 +22,8 @@ export interface Waypoint {
   };
   velocity: number;
   hold_time: number;
+  bezier: boolean;
+  controlPoint: CartesianCoords;
 }
 
 export interface State {
@@ -33,6 +35,7 @@ export interface State {
   elapsed: number;
   totalElapsed: number;
   totalTime: number;
+  orbitEnabled: boolean;
 }
 
 export enum Controls {

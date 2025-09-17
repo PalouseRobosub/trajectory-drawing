@@ -73,6 +73,16 @@ const Path = () => {
     setWaypoints(newWaypoints)
   }
 
+  const setBezier = (bezier: boolean, waypointIndex: number) => {
+    const newWaypoints = [...waypoints]
+    newWaypoints[waypointIndex] = {
+      ...newWaypoints[waypointIndex],
+      bezier: bezier,
+    }
+
+    setWaypoints(newWaypoints)
+  }
+
   const deleteWaypoint = (waypointIndex: number) => {
     const newWaypoints = [...waypoints]
     newWaypoints.splice(waypointIndex, 1)
@@ -98,6 +108,12 @@ const Path = () => {
       },
       velocity: 1,
       hold_time: 0,
+      bezier: false,
+      controlPoint: {
+        x: 0,
+        y: 0,
+        z: 0,
+      }
     },)
 
     setWaypoints(newWaypoints)
@@ -116,6 +132,7 @@ const Path = () => {
             <TableHead>Orientation</TableHead>
             <TableHead>Velocity</TableHead>
             <TableHead>Hold Time</TableHead>
+            <TableHead>Bezier</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -145,6 +162,9 @@ const Path = () => {
                 </TableCell>
                 <TableCell>
                   <Input className="min-w-14 w-full" defaultValue={waypoint.hold_time} onChange={(e) => setHoldTime(parseFloat(e.target.value), i)} />
+                </TableCell>
+                <TableCell>
+                  <Input type="checkbox" defaultChecked={waypoint.bezier} onChange={(e) => setBezier(e.target.checked as unknown as boolean, i)}/>
                 </TableCell>
                 <TableCell>
                   <Button variant="destructive" className="cursor-pointer" onClick={() => deleteWaypoint(i)}>
