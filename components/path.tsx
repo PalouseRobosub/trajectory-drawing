@@ -58,7 +58,7 @@ const Path = () => {
                   color="rebeccapurple"
                   lineWidth={4}
                 />
-                <ControlPoint startPos={waypoint.controlPoint} waypointIndex={i} />
+                <ControlPoint waypointIndex={i} />
                 <Line
                   points={[
                     cartToArray(waypoint.position),
