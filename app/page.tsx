@@ -8,6 +8,7 @@ import * as THREE from "three";
 import {useStateContext, useTrajectoryContext} from "@/components/context";
 import Pool from "@/components/pool";
 import Path from "@/components/path";
+import TrajectoryManager from "@/components/trajectory-manager";
 // import SubController, {SubHandle} from "@/components/subController";
 
 export default function Home() {
@@ -20,7 +21,8 @@ export default function Home() {
   const { trajectories } = useTrajectoryContext()
 
   return (
-    <div className="h-screen w-full bg-neutral-300 fixed inset-0 z-0">
+    <div className="h-screen w-full bg-neutral-300 fixed inset-0 z-0 flex flex-row">
+      <TrajectoryManager />
         <Canvas camera={{ position: [0, 0, 2] }}>
           <Suspense
             fallback={
