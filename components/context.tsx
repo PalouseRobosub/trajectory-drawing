@@ -1,7 +1,7 @@
 'use client'
 
 import {createContext, useContext, useEffect, useState} from "react";
-import {State, Waypoint} from "@/app/types";
+import {State, Trajectory, Waypoint} from "@/app/types";
 
 const defaultWaypoints: Waypoint[] = [
   {
@@ -158,17 +158,50 @@ const defaultState: State = {
   totalElapsed: 0,
   totalTime: 0,
   orbitEnabled: true,
+  pathFiles: []
 }
 
 const stateContext = createContext({})
 const waypointContext = createContext({})
+const trajectoryContext = createContext({})
 
 
 const Context = ({ children }: { children: React.ReactNode } ) => {
 
   const [state, setState] = useState<State>(defaultState)
   const [waypoints, setWaypoints] = useState<Waypoint[]>(defaultWaypoints)
+  const [trajectories, setTrajectories] = useState<Trajectory[]>([])
   const [loadedWaypoints, setLoadedWaypoints] = useState(false)
+
+  const loadTrajectories = async () => {
+    let pathFiles: string[] = []
+    await fetch("/api/list").then((res) => res.json()).then(data => pathFiles = data)
+    pathFiles = pathFiles.filter((f) => f.endsWith(".json"))
+
+    setState({...state, pathFiles: pathFiles})
+
+    const newTrajectories: Trajectory[] = []
+
+    for (const path of pathFiles) {
+      await fetch(`/api/${path}`).then((res) => res.json()).then(data => newTrajectories.push(data.trajectory))
+    }
+
+    setTrajectories(newTrajectories)
+  }
+
+  useEffect(() => {
+    loadTrajectories()
+  }, []);
+
+  useEffect(() => {
+    trajectories.forEach(async (trajectory, index) => {
+      const data = {
+        trajectory: trajectory,
+      }
+
+      await fetch(`/api/${state.pathFiles[index]}`, {method: "PUT", body: JSON.stringify(data)}).then((res) => res.text()).then(text => console.log(text))
+    })
+  }, [trajectories])
 
   useEffect(() => {
     const storedWaypoints = JSON.parse(localStorage.getItem("waypoints") as string);
@@ -184,14 +217,12 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
     if (loadedWaypoints) localStorage.setItem('waypoints', JSON.stringify(waypoints));
   }, [loadedWaypoints, waypoints]);
 
-  useEffect(() => {
-    console.log("state changed")
-  }, [state]);
-
   return (
     <stateContext.Provider value={{ state, setState }}>
       <waypointContext.Provider value={{ waypoints, setWaypoints }}>
-        {children}
+        <trajectoryContext.Provider value={{ trajectories, setTrajectories }}>
+          {children}
+        </trajectoryContext.Provider>
       </waypointContext.Provider>
     </stateContext.Provider>
   )
@@ -199,5 +230,6 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
 
 const useStateContext = () => useContext(stateContext) as { state: State , setState: (state: State) => void }
 const useWaypointContext = () => useContext(waypointContext) as { waypoints: Waypoint[], setWaypoints: (waypoints: Waypoint[]) => void }
+const useTrajectoryContext = () => useContext(trajectoryContext) as { trajectories: Trajectory[], setTrajectories: (trajectories: Trajectory[]) => void }
 
-export { Context, useStateContext, useWaypointContext }
+export { Context, useStateContext, useWaypointContext, useTrajectoryContext }

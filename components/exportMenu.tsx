@@ -6,7 +6,6 @@ import {useState} from "react";
 import {Waypoint} from "@/app/types";
 import {Button} from "@/components/ui/button";
 import {FileDown} from "lucide-react";
-import YAML from "js-yaml";
 
 const defaultData = {
   name: "mission_trajectory",
@@ -51,14 +50,14 @@ const ExportMenu = () => {
     }
   }
 
-  const exportYaml = () => {
+  const exportJson = () => {
     const data = prepareData(waypoints, trajectoryData);
-    const yamlData = YAML.dump(data);
-    const blob = new Blob([yamlData], { type: "application/yaml" });
+    const string = JSON.stringify(data);
+    const blob = new Blob([string], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${trajectoryData.filename}.yaml`;
+    link.download = `${trajectoryData.filename}.json`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -114,7 +113,7 @@ const ExportMenu = () => {
         File Name:
         <Input className="min-w-32 w-full" defaultValue={trajectoryData.filename} onChange={(e) => setTrajectoryData({...trajectoryData, filename: e.target.value})} />
       </div>
-      <Button className="cursor-pointer" onClick={exportYaml}><FileDown /> Export YAML</Button>
+      <Button className="cursor-pointer" onClick={exportJson}><FileDown /> Export JSON</Button>
     </div>
   )
 }

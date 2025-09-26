@@ -1,4 +1,4 @@
-import {Download, Import, MapPinPen, Waves, Waypoints} from "lucide-react";
+import {Download, Folder, Import, MapPinPen, Waves, Waypoints} from "lucide-react";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import PoolMenu from "@/components/poolMenu";
@@ -6,12 +6,23 @@ import PathMenu from "@/components/pathMenu";
 import ExportMenu from "@/components/exportMenu";
 import WaypointOptionsMenu from "@/components/waypointOptionsMenu";
 import ImportMenu from "@/components/importMenu";
+import FolderMenu from "@/components/folderMenu";
 
 const Menu = () => {
 
   return (
     <div className="fixed right-0 h-screen flex flex-col justify-center z-20 pr-2 gap-4">
       <div className="bg-white p-2 flex flex-col gap-2 text-lg rounded-xl">
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="default" className="cursor-pointer aspect-square">
+              <Folder className="scale-150" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-min" side="left">
+            <FolderMenu />
+          </PopoverContent>
+        </Popover>
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="default" className="cursor-pointer aspect-square">

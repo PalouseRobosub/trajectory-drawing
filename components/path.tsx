@@ -1,12 +1,26 @@
 import {Billboard, Line, QuadraticBezierLine, Sphere, Text} from "@react-three/drei"
-import {useStateContext, useWaypointContext} from "@/components/context";
+import {useStateContext} from "@/components/context";
 import {cartToArray} from "@/lib/cords";
-import ControlPoint from "@/components/controlPoint";
+import Gizmo from "@/components/gizmo";
+import {Waypoint} from "@/app/types";
 
-const Path = () => {
+const colors = [
+  "#FF5733",
+  "#33FF57",
+  "#3357FF",
+  "#F1C40F",
+  "#9B59B6",
+  "#E67E22",
+  "#1ABC9C",
+  "#E74C3C",
+  "#2ECC71",
+  "#3498DB"
+];
+
+
+const Path = ({ waypoints, index }: { waypoints: Waypoint[], index: number }) => {
 
   const { state } = useStateContext()
-  const { waypoints } = useWaypointContext()
 
   return (
     <group>
@@ -44,7 +58,7 @@ const Path = () => {
             {!waypoint.bezier &&
               <Line
                 points={[cartToArray(waypoint.position), cartToArray(waypoints[i + 1].position)]}
-                color="rebeccapurple"
+                color={colors[index%colors.length]}
                 lineWidth={4}
               />
             }
@@ -55,18 +69,21 @@ const Path = () => {
                   start={cartToArray(waypoint.position)}
                   mid={cartToArray(waypoint.controlPoint)}
                   end={cartToArray(waypoints[i+1].position)}
-                  color="rebeccapurple"
+                  color={colors[index%colors.length]}
                   lineWidth={4}
                 />
-                <ControlPoint waypointIndex={i} />
+                <Gizmo waypointIndex={i} trajectoryIndex={index} />
                 <Line
                   points={[
                     cartToArray(waypoint.position),
                     cartToArray(waypoint.controlPoint),
                     cartToArray(waypoints[i + 1].position)
                   ]}
-                  color="yellow"
+                  color="black"
                   lineWidth={4}
+                  dashed
+                  dashSize={0.5}
+                  gapSize={0.2}
                 />
               </>
             }

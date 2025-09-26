@@ -26,6 +26,24 @@ export interface Waypoint {
   controlPoint: CartesianCoords;
 }
 
+export interface Trajectory {
+  name: string
+  frame_id: string
+  vehicle_type: string
+  waypoints: Waypoint[]
+  parameters: {
+    max_linear_velocity: number
+    max_angular_velocity: number
+    position_tolerance: number
+    orientation_tolerance: number
+  }
+  safety: {
+    max_depth: number
+    emergency_surface: boolean
+    collision_avoidance: boolean
+  }
+}
+
 export interface State {
   poolDimensions: PoolDimensions
   waypointOptions: {
@@ -36,6 +54,7 @@ export interface State {
   totalElapsed: number;
   totalTime: number;
   orbitEnabled: boolean;
+  pathFiles: string[];
 }
 
 export enum Controls {
