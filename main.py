@@ -28,12 +28,20 @@ def index():
 def get_ws(path):
     return send_from_directory(path=path, directory='./out')
 
-@app.route("/api/list", defaults={'path': '/'})
-@app.route("/api/list/<path:path>")
-def get_contents(path):
-    filepath = check_safe(path)
+@app.route("/api/list")
+def get_contents():
+    filepath = check_safe("/")
     if filepath:
-        return os.listdir(filepath)
+        jsonfiles = []
+        for root, dirs, files in os.walk(filepath):
+            for file in files:
+                if file.lower().endswith(".json"):
+                    path = os.path.join(root, file)
+                    jsonfiles.append(path)
+
+        jsonfiles = [os.path.relpath(path, "./paths") for path in jsonfiles]
+
+        return jsonfiles
     else:
         abort(403)
 

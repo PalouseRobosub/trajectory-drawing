@@ -55,6 +55,7 @@ export interface State {
   totalTime: number;
   orbitEnabled: boolean;
   pathFiles: string[];
+  displayPaths: boolean[];
 }
 
 export enum Controls {

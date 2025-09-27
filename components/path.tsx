@@ -22,6 +22,8 @@ const Path = ({ waypoints, index }: { waypoints: Waypoint[], index: number }) =>
 
   const { state } = useStateContext()
 
+  if (!state.displayPaths[index]) return;
+
   return (
     <group>
       {waypoints.map((waypoint, i) => {

@@ -1,14 +1,17 @@
 'use client'
 
-import {useWaypointContext} from "@/components/context";
+import {useStateContext, useWaypointContext} from "@/components/context";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Input} from "@/components/ui/input";
 import {Plus, Trash} from "lucide-react";
 import {Button} from "@/components/ui/button";
+import {Label} from "@/components/ui/label";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 
-const Path = () => {
+const PathMenu = () => {
 
   const { waypoints, setWaypoints } = useWaypointContext()
+  const { state, setState } = useStateContext()
 
   const setName = (name: string, waypointIndex: number) => {
     const newWaypoints = [...waypoints]
@@ -121,7 +124,20 @@ const Path = () => {
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <div className="font-semibold">Waypoints</div>
+      <p className="border-b-2 text-center bg-gray-200 p-2 text-lg w-full">Path Editor</p>
+      <div className="flex flex-row items-center justify-center gap-2 p-2 w-full">
+        <Label htmlFor="trajSelect">Select Trajectory:</Label>
+        <Select>
+          <SelectTrigger className="w-1/2">
+            <SelectValue placeholder="Select Trajectory" />
+          </SelectTrigger>
+          <SelectContent>
+            {state.pathFiles.map((item, index) => (
+              <SelectItem key={index} value={index.toString()}>{item}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>
@@ -183,4 +199,4 @@ const Path = () => {
   )
 }
 
-export default Path
+export default PathMenu

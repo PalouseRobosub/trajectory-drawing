@@ -158,7 +158,8 @@ const defaultState: State = {
   totalElapsed: 0,
   totalTime: 0,
   orbitEnabled: true,
-  pathFiles: []
+  pathFiles: [],
+  displayPaths: []
 }
 
 const stateContext = createContext({})
@@ -173,33 +174,22 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
   const [trajectories, setTrajectories] = useState<Trajectory[]>([])
   const [loadedWaypoints, setLoadedWaypoints] = useState(false)
 
-  const loadTrajectories = async (path: string) => {
-    let rawFiles: string[] = []
-    await fetch(`/api/list${path}`).then((res) => res.json()).then(data => rawFiles = data.forEach((f: string) => path + f))
-
-    for (const file of rawFiles) {
-      if (!file.includes(".")) {
-        loadTrajectories(`/${file}`).then((res) => rawFiles.push(...res.trajFiles))
-      }
-    }
-
-    const trajFiles = rawFiles.filter((f) => f.endsWith(".json"))
+  const loadTrajectories = async () => {
+    let files: string[] = []
+    await fetch("/api/list").then((res) => res.json()).then(data => files = data)
 
     const newTrajectories: Trajectory[] = []
 
-    for (const trajectory of trajFiles) {
-      await fetch(`/api/${trajectory}`).then((res) => res.json()).then(data => newTrajectories.push(data.trajectory))
+    for (const file of files) {
+      await fetch(`/api/${file}`).then((res) => res.json()).then(data => newTrajectories.push(data.trajectory))
     }
 
-    return {newTrajectories, trajFiles}
+    setState({...state, pathFiles: files, displayPaths: new Array(newTrajectories.length).fill(true)})
+    setTrajectories(newTrajectories)
   }
 
   useEffect(() => {
-    loadTrajectories("/").then(({newTrajectories, trajFiles}) => {
-      setState({...state, pathFiles: trajFiles})
-      setTrajectories(newTrajectories)
-      console.log(trajFiles)
-    })
+    loadTrajectories()
   }, []);
 
   useEffect(() => {
