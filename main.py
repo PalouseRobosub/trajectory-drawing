@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import sys
 
 from flask import Flask, send_from_directory, abort, Response, request
 from pathlib import Path
@@ -8,8 +9,13 @@ import webbrowser
 
 app = Flask(__name__)
 
+if getattr(sys, 'frozen', False):
+    cwd = sys._MEIPASS
+else:
+    cwd = Path(__file__).resolve().parent
+
 def check_safe(filename):
-    parent = Path("./paths").resolve()
+    parent = Path(os.getcwd() + "/paths").resolve()
     test = (parent / filename).resolve()
 
     if filename == '/':
@@ -22,11 +28,11 @@ def check_safe(filename):
 
 @app.route("/", methods=["GET"])
 def index():
-    return send_from_directory(path="index.html", directory='./out')
+    return send_from_directory(path="index.html", directory=os.path.join(cwd, "out"))
 
 @app.route("/<path:path>", methods=["GET"])
 def get_ws(path):
-    return send_from_directory(path=path, directory='./out')
+    return send_from_directory(path=path, directory=os.path.join(cwd, "out"))
 
 @app.route("/api/list")
 def get_contents():
@@ -39,7 +45,7 @@ def get_contents():
                     path = os.path.join(root, file)
                     jsonfiles.append(path)
 
-        jsonfiles = [os.path.relpath(path, "./paths") for path in jsonfiles]
+        jsonfiles = [os.path.relpath(path, check_safe("/")) for path in jsonfiles]
 
         return jsonfiles
     else:
@@ -47,7 +53,11 @@ def get_contents():
 
 @app.route("/api/<path:path>", methods=["GET"])
 def get(path):
-    return send_from_directory(path=path, directory='./paths')
+    return send_from_directory(path=path, directory=check_safe("/"))
+
+@app.route("/test", methods=["GET"])
+def test():
+    return os.listdir("./paths")
 
 @app.route("/api/<path:path>", methods=["PUT"])
 def put(path):

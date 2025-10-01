@@ -1,4 +1,3 @@
-import {Switch} from "@/components/ui/switch";
 import {useStateContext} from "@/components/context";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Input} from "@/components/ui/input";
@@ -6,6 +5,7 @@ import {useState} from "react";
 import {Folder, MapPinPen, Settings, Waves, Waypoints} from "lucide-react";
 import PoolMenu from "@/components/poolMenu";
 import PathMenu from "@/components/pathMenu";
+import WaypointOptionsMenu from "@/components/waypointOptionsMenu";
 
 const TrajectoryList = () => {
 
@@ -33,12 +33,7 @@ const TrajectoryList = () => {
 
   return (
       <div className="w-[20vw]">
-        <p className="border-b-2 text-center bg-gray-200 p-2 text-lg">Loaded Trajectories</p>
-        <div className="flex flex-row justify-center items-center gap-4 p-2 bg-gray-200">
-          Viewport
-          <Switch className="data-[state=unchecked]:bg-green-400 bg-gray-300" />
-          Trajectory Editor
-        </div>
+        <p className="border-b-2 text-center bg-gray-200 p-2 text-lg h-12">Loaded Trajectories</p>
         <Table>
           <TableHeader>
             <TableRow>
@@ -79,7 +74,9 @@ const TrajectoryManager = () => {
     case 3:
       content = <PathMenu />
       break;
-
+    case 4:
+      content = <WaypointOptionsMenu />
+      break;
   }
 
   return (
@@ -95,7 +92,7 @@ const TrajectoryManager = () => {
           <div className="p-2 hover:bg-gray-300 hover:cursor-pointer" onClick={() => setOpenMenu((prev) => prev === 3 ? 0 : 3)}>
             <Waypoints className="w-8 h-8" />
           </div>
-          <div className="p-2 hover:bg-gray-300 hover:cursor-pointer">
+          <div className="p-2 hover:bg-gray-300 hover:cursor-pointer" onClick={() => setOpenMenu((prev) => prev === 4 ? 0 : 4)}>
             <MapPinPen className="w-8 h-8" />
           </div>
           <div className="p-2 hover:bg-gray-300 hover:cursor-pointer">

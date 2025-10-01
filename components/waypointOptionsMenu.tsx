@@ -10,8 +10,8 @@ const WaypointOptionsMenu = () => {
   const { state, setState } = useStateContext()
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="font-semibold text-nowrap">Waypoint Options</div>
+    <div className="flex flex-col items-center gap-2 w-[20vw]">
+      <p className="border-b-2 text-center bg-gray-200 p-2 text-lg w-full h-12">Waypoint Options</p>
       <div className="flex flex-row items-center gap-2 text-nowrap">
         <Label htmlFor="dots">Dot Waypoints:</Label>
         <Input type="checkbox" id="dots" className="min-w-32 w-full accent-neutral-900" defaultChecked={state.waypointOptions.dotWaypoints} onChange={(e) => setState({...state, waypointOptions: {...state.waypointOptions, dotWaypoints: e.target.checked}})} />

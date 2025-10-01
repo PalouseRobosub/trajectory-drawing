@@ -30,7 +30,6 @@ export default function RootLayout({
       >
         <Context>
           {children}
-          <Menu />
         </Context>
       </body>
     </html>
