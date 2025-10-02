@@ -1,11 +1,15 @@
-import {useStateContext} from "@/components/context";
+'use client'
+
+import {useStateContext, useTrajectoryContext} from "@/components/context";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Input} from "@/components/ui/input";
-import {useState} from "react";
-import {Folder, Settings, Waves, Waypoints} from "lucide-react";
+import {useEffect, useState} from "react";
+import {Folder, Save, Settings, TrafficCone, Waves, Waypoints} from "lucide-react";
 import PoolMenu from "@/components/poolMenu";
 import PathMenu from "@/components/pathMenu";
 import SettingsMenu from "@/components/settingsMenu";
+import {Button} from "@/components/ui/button";
+import ObstaclesMenu from "@/components/obstaclesMenu";
 
 const TrajectoryList = () => {
 
@@ -54,10 +58,27 @@ const TrajectoryList = () => {
   )
 }
 
-const TrajectoryManager = () => {
+const Sidebar = () => {
 
-  const { state } = useStateContext()
+  const { state, setState } = useStateContext()
+  const { trajectories } = useTrajectoryContext()
   const [openMenu, setOpenMenu] = useState(0)
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const saveTrajectories = async () => {
+    for (const trajectory of trajectories) {
+      const index = trajectories.indexOf(trajectory);
+      const data = {
+        trajectory: trajectory,
+      }
+
+      await fetch(`/api/${state.pathFiles[index]}`, {method: "PUT", body: JSON.stringify(data)}).then((res) => res.text()).then(text => console.log(text))
+    }
+    setState({...state, unsaved: false})
+  }
 
   let content = <></>
 
@@ -75,6 +96,9 @@ const TrajectoryManager = () => {
       content = <PathMenu />
       break;
     case 4:
+      content = <ObstaclesMenu />
+      break;
+    case 5:
       content = <SettingsMenu />
       break;
   }
@@ -92,7 +116,10 @@ const TrajectoryManager = () => {
           <div className={`p-2 hover:bg-gray-300 hover:cursor-pointer ${openMenu === 3 ? "bg-gray-300" : ""}`} onClick={() => setOpenMenu((prev) => prev === 3 ? 0 : 3)}>
             <Waypoints className="w-8 h-8" />
           </div>
-          <div className={`p-2 hover:bg-gray-300 hover:cursor-pointer ${openMenu === 5 ? "bg-gray-300" : ""}`} onClick={() => setOpenMenu((prev) => prev === 4 ? 0 : 4)}>
+          <div className={`p-2 hover:bg-gray-300 hover:cursor-pointer ${openMenu === 4 ? "bg-gray-300" : ""}`} onClick={() => setOpenMenu((prev) => prev === 4 ? 0 : 4)}>
+            <TrafficCone className="w-8 h-8" />
+          </div>
+          <div className={`p-2 hover:bg-gray-300 hover:cursor-pointer ${openMenu === 5 ? "bg-gray-300" : ""}`} onClick={() => setOpenMenu((prev) => prev === 5 ? 0 : 5)}>
             <Settings className="w-8 h-8" />
           </div>
         </div>
@@ -100,8 +127,14 @@ const TrajectoryManager = () => {
           {content}
         </div>
       </div>
+      <div className="py-4 gap-2 flex flex-col items-center justify-center w-12 bg-gray-200">
+        {mounted && <div className={`h-4 w-4 ${state.unsaved ? "bg-red-500" : "bg-green-500"} rounded-full`}></div>}
+        <Button className="p-3" onClick={saveTrajectories}>
+          <Save />
+        </Button>
+      </div>
     </div>
   )
 }
 
-export default TrajectoryManager;
+export default Sidebar;

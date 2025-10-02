@@ -50,12 +50,22 @@ export interface State {
     dotWaypoints: boolean;
     waypointLabels: "none"|"seq"|"name"
   }
-  elapsed: number;
-  totalElapsed: number;
-  totalTime: number;
   orbitEnabled: boolean;
   pathFiles: string[];
   displayPaths: boolean[];
+  autosave: boolean;
+  unsaved: boolean;
+}
+
+export interface Obstacle {
+  shape: ObstacleShape;
+  position: CartesianCoords;
+  rotation: {
+    x: number;
+    y: number;
+    z: number;
+    w: number;
+  };
 }
 
 export enum Controls {
@@ -65,4 +75,11 @@ export enum Controls {
   right = 'right',
   up = 'up',
   down = 'down',
+}
+
+export enum ObstacleShape {
+  RectPrism,
+  Sphere,
+  Cylinder,
+  Pyramid
 }

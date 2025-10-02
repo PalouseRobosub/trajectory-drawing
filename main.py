@@ -57,7 +57,7 @@ def get(path):
 
 @app.route("/test", methods=["GET"])
 def test():
-    return os.listdir("./paths")
+    return os.getcwd()
 
 @app.route("/api/<path:path>", methods=["PUT"])
 def put(path):

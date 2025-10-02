@@ -1,5 +1,5 @@
 import {Cone, DragControls, Edges, Line, Outlines, Plane, Sphere} from "@react-three/drei";
-import {useStateContext, useTrajectoryContext, useWaypointContext} from "@/components/context";
+import {useStateContext, useTrajectoryContext} from "@/components/context";
 import * as THREE from "three";
 import {useEffect, useRef, useState} from "react";
 import {Group, Matrix4, Vector3} from "three";
@@ -8,7 +8,6 @@ type AxisLimits = [[number, number] | undefined, [number, number] | undefined, [
 
 const Gizmo = ({ waypointIndex, trajectoryIndex }: { waypointIndex: number, trajectoryIndex: number }) => {
 
-  const { waypoints, setWaypoints } = useWaypointContext()
   const { trajectories, setTrajectories } = useTrajectoryContext()
   const { state, setState } = useStateContext();
   const [activeDrag, setActiveDrag] = useState<boolean>(false);

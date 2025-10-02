@@ -14,7 +14,7 @@ const SettingsMenu = () => {
       <p className="border-b-2 text-center bg-gray-200 p-2 text-lg w-full h-12">Settings</p>
       <div className="flex flex-row gap-2 items-center">
         Autosave
-        <Switch className="data-[state=checked]:bg-green-400" />
+        <Switch className="data-[state=checked]:bg-green-400" checked={state.autosave} onCheckedChange={(checked) => setState({...state, autosave: checked})} />
       </div>
       <div className="flex flex-row items-center gap-2 text-nowrap">
         <Label htmlFor="dots">Dot Waypoints:</Label>

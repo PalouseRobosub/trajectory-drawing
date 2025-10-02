@@ -8,7 +8,7 @@ import * as THREE from "three";
 import {useStateContext, useTrajectoryContext} from "@/components/context";
 import Pool from "@/components/pool";
 import Path from "@/components/path";
-import TrajectoryManager from "@/components/trajectory-manager";
+import Sidebar from "@/components/sidebar";
 // import SubController, {SubHandle} from "@/components/subController";
 
 export default function Home() {
@@ -22,7 +22,7 @@ export default function Home() {
 
   return (
     <div className="h-screen w-full bg-neutral-300 fixed inset-0 z-0 flex flex-row">
-      <TrajectoryManager />
+      <Sidebar />
         <Canvas camera={{ position: [0, 0, 2] }}>
           <Suspense
             fallback={

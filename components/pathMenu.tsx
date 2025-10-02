@@ -186,7 +186,7 @@ const PathMenu = () => {
   }
 
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-center gap-2 min-w-[20vw]">
       <p className="border-b-2 text-center bg-gray-200 p-2 text-lg w-full h-12">Trajectory Editor</p>
       <div className="flex flex-row items-center justify-center gap-2 p-2 w-full">
         <Label htmlFor="trajSelect" className="text-nowrap">Select Trajectory:</Label>
@@ -198,7 +198,6 @@ const PathMenu = () => {
             {state.pathFiles.map((item, index) => (
               <SelectItem key={index} value={index.toString()}>
                 {item}
-                {colors[index]}
                 <div className="h-4 w-4 rounded-full" style={{backgroundColor: colors[index]}}></div>
               </SelectItem>
             ))}
