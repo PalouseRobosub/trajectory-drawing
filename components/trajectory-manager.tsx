@@ -2,10 +2,10 @@ import {useStateContext} from "@/components/context";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Input} from "@/components/ui/input";
 import {useState} from "react";
-import {Folder, MapPinPen, Settings, Waves, Waypoints} from "lucide-react";
+import {Folder, Settings, Waves, Waypoints} from "lucide-react";
 import PoolMenu from "@/components/poolMenu";
 import PathMenu from "@/components/pathMenu";
-import WaypointOptionsMenu from "@/components/waypointOptionsMenu";
+import SettingsMenu from "@/components/settingsMenu";
 
 const TrajectoryList = () => {
 
@@ -75,7 +75,7 @@ const TrajectoryManager = () => {
       content = <PathMenu />
       break;
     case 4:
-      content = <WaypointOptionsMenu />
+      content = <SettingsMenu />
       break;
   }
 
@@ -83,19 +83,16 @@ const TrajectoryManager = () => {
     <div className="h-full bg-white flex flex-col">
       <div className="flex flex-row items-center justify-center h-full">
         <div className="bg-gray-200 h-full">
-          <div className="p-2 hover:bg-gray-300 hover:cursor-pointer" onClick={() => setOpenMenu((prev) => prev === 1 ? 0 : 1)}>
+          <div className={`p-2 hover:bg-gray-300 hover:cursor-pointer ${openMenu === 1 ? "bg-gray-300" : ""}`} onClick={() => setOpenMenu((prev) => prev === 1 ? 0 : 1)}>
             <Folder className="w-8 h-8" />
           </div>
-          <div className="p-2 hover:bg-gray-300 hover:cursor-pointer" onClick={() => setOpenMenu((prev) => prev === 2 ? 0 : 2)}>
+          <div className={`p-2 hover:bg-gray-300 hover:cursor-pointer ${openMenu === 2 ? "bg-gray-300" : ""}`} onClick={() => setOpenMenu((prev) => prev === 2 ? 0 : 2)}>
             <Waves className="w-8 h-8" />
           </div>
-          <div className="p-2 hover:bg-gray-300 hover:cursor-pointer" onClick={() => setOpenMenu((prev) => prev === 3 ? 0 : 3)}>
+          <div className={`p-2 hover:bg-gray-300 hover:cursor-pointer ${openMenu === 3 ? "bg-gray-300" : ""}`} onClick={() => setOpenMenu((prev) => prev === 3 ? 0 : 3)}>
             <Waypoints className="w-8 h-8" />
           </div>
-          <div className="p-2 hover:bg-gray-300 hover:cursor-pointer" onClick={() => setOpenMenu((prev) => prev === 4 ? 0 : 4)}>
-            <MapPinPen className="w-8 h-8" />
-          </div>
-          <div className="p-2 hover:bg-gray-300 hover:cursor-pointer">
+          <div className={`p-2 hover:bg-gray-300 hover:cursor-pointer ${openMenu === 5 ? "bg-gray-300" : ""}`} onClick={() => setOpenMenu((prev) => prev === 4 ? 0 : 4)}>
             <Settings className="w-8 h-8" />
           </div>
         </div>

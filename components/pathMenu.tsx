@@ -9,6 +9,19 @@ import {Label} from "@/components/ui/label";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {useState} from "react";
 
+const colors = [
+  "#FF5733",
+  "#33FF57",
+  "#3357FF",
+  "#F1C40F",
+  "#9B59B6",
+  "#E67E22",
+  "#1ABC9C",
+  "#E74C3C",
+  "#2ECC71",
+  "#3498DB"
+];
+
 const PathMenu = () => {
 
   const { state, setState } = useStateContext()
@@ -183,7 +196,11 @@ const PathMenu = () => {
           </SelectTrigger>
           <SelectContent>
             {state.pathFiles.map((item, index) => (
-              <SelectItem key={index} value={index.toString()}>{item}</SelectItem>
+              <SelectItem key={index} value={index.toString()}>
+                {item}
+                {colors[index]}
+                <div className="h-4 w-4 rounded-full" style={{backgroundColor: colors[index]}}></div>
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
