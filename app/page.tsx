@@ -9,6 +9,7 @@ import {useStateContext, useTrajectoryContext} from "@/components/context";
 import Pool from "@/components/pool";
 import Path from "@/components/path";
 import Sidebar from "@/components/sidebar";
+import Obstacles from "@/components/obstacles";
 // import SubController, {SubHandle} from "@/components/subController";
 
 export default function Home() {
@@ -40,6 +41,7 @@ export default function Home() {
             <ambientLight intensity={0.1} />
             <Axis poolDimensions={state.poolDimensions} />
             <Pool poolDimensions={state.poolDimensions} />
+            <Obstacles />
             {trajectories &&
               trajectories.map((trajectory, index) => {
                 if (!trajectory.waypoints) return;

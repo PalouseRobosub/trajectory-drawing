@@ -1,4 +1,4 @@
-import {Box, Cone, Cylinder, Edges, Torus} from "@react-three/drei";
+import {Box, Cone, Cylinder, Edges, Sphere, Torus} from "@react-three/drei";
 import {Waypoint} from "@/app/types";
 import {RefObject} from "react";
 import {cartToArray} from "@/lib/cords";

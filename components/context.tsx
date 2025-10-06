@@ -1,7 +1,7 @@
 'use client'
 
 import {createContext, useContext, useEffect, useState} from "react";
-import {State, Trajectory} from "@/app/types";
+import {Obstacle, ObstacleShape, State, Trajectory} from "@/app/types";
 
 const defaultState: State = {
   poolDimensions: {
@@ -20,8 +20,24 @@ const defaultState: State = {
   unsaved: false,
 }
 
+const defaultObstacles: Obstacle[] = [
+  {
+    shape: ObstacleShape.Sphere,
+    position: {
+      x: 1,
+      y: 2,
+      z: -1
+    },
+    args: {
+      radius: 0.5
+    },
+    color: "#15366b"
+  }
+]
+
 const stateContext = createContext({})
 const trajectoryContext = createContext({})
+const obstacleContext = createContext({})
 
 const Context = ({ children }: { children: React.ReactNode } ) => {
 
@@ -34,6 +50,7 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
     }
   });
   const [trajectories, setTrajectories] = useState<Trajectory[]>([])
+  const [obstacles, setObstacles] = useState<Obstacle[]>(defaultObstacles)
 
   const loadTrajectories = async () => {
     let files: string[] = []
@@ -80,7 +97,9 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
   return (
     <stateContext.Provider value={{ state, setState }}>
       <trajectoryContext.Provider value={{ trajectories, setTrajectories }}>
-        {children}
+        <obstacleContext.Provider value={{ obstacles, setObstacles }}>
+          {children}
+        </obstacleContext.Provider>
       </trajectoryContext.Provider>
     </stateContext.Provider>
   )
@@ -88,5 +107,6 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
 
 const useStateContext = () => useContext(stateContext) as { state: State , setState: (state: State) => void }
 const useTrajectoryContext = () => useContext(trajectoryContext) as { trajectories: Trajectory[], setTrajectories: (trajectories: Trajectory[]) => void }
+const useObstacleContext = () => useContext(obstacleContext) as { obstacles: Obstacle[], setObstacles: (obstacles: Obstacle[]) => void }
 
-export { Context, useStateContext, useTrajectoryContext }
+export { Context, useStateContext, useTrajectoryContext, useObstacleContext }
