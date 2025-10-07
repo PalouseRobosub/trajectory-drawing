@@ -21,6 +21,7 @@ const ObstaclesMenu = () => {
           y: 1,
           z: 0
         },
+        rotation: undefined,
         args: {
           radius: 0.5
         },
@@ -130,9 +131,29 @@ const ObstaclesMenu = () => {
                       <Input id="radius" className="w-14" value={(obstacle.args as SphereArgs).radius} onChange={(e) => setArgs(parseFloat(e.target.value), index, "radius")} />
                     </div>
                   }
+                  {obstacle.shape === ObstacleShape.Cylinder &&
+                    <div className="flex flex-row items-center">
+                      <Label htmlFor="radiusTop">Radius Top:&nbsp;</Label>
+                      <Input id="radiusTop" className="w-14" value={(obstacle.args as CylinderArgs).radiusTop} onChange={(e) => setArgs(parseFloat(e.target.value), index, "radiusTop")} />
+                      <Label htmlFor="radiusBottom">Radius Bottom:&nbsp;</Label>
+                      <Input id="radiusBottom" className="w-14" value={(obstacle.args as CylinderArgs).radiusBottom} onChange={(e) => setArgs(parseFloat(e.target.value), index, "radiusBottom")} />
+                      <Label htmlFor="height">Height:&nbsp;</Label>
+                      <Input id="height" className="w-14" value={(obstacle.args as CylinderArgs).height} onChange={(e) => setArgs(parseFloat(e.target.value), index, "height")} />
+                    </div>
+                  }
+                  {obstacle.shape === ObstacleShape.Box &&
+                    <div className="flex flex-row items-center">
+                      <Label htmlFor="width">Width:&nbsp;</Label>
+                      <Input id="width" className="w-14" value={(obstacle.args as BoxArgs).width} onChange={(e) => setArgs(parseFloat(e.target.value), index, "width")} />
+                      <Label htmlFor="height">Height:&nbsp;</Label>
+                      <Input id="height" className="w-14" value={(obstacle.args as BoxArgs).height} onChange={(e) => setArgs(parseFloat(e.target.value), index, "height")} />
+                      <Label htmlFor="depth">Depth:&nbsp;</Label>
+                      <Input id="depth" className="w-14" value={(obstacle.args as BoxArgs).depth} onChange={(e) => setArgs(parseFloat(e.target.value), index, "depth")} />
+                    </div>
+                  }
                 </TableCell>
                 <TableCell>
-                  <Input type="color" className="w-8 p-0.5" value={obstacle.color} onChange={(e) => setColor(e.target.value, index)} />
+                  <Input type="color" className="aspect-square p-[4px]" value={obstacle.color} onChange={(e) => setColor(e.target.value, index)} />
                 </TableCell>
                 <TableCell>
                   <Button variant="destructive" className="cursor-pointer" onClick={() => deleteObstacle(index)}>

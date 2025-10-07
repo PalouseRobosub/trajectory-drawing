@@ -1,7 +1,7 @@
 'use client'
 
 import {createContext, useContext, useEffect, useState} from "react";
-import {Obstacle, ObstacleShape, State, Trajectory} from "@/app/types";
+import {Obstacle, State, Trajectory} from "@/app/types";
 
 const defaultState: State = {
   poolDimensions: {
@@ -20,21 +20,6 @@ const defaultState: State = {
   unsaved: false,
 }
 
-const defaultObstacles: Obstacle[] = [
-  {
-    shape: ObstacleShape.Sphere,
-    position: {
-      x: 1,
-      y: 2,
-      z: -1
-    },
-    args: {
-      radius: 0.5
-    },
-    color: "#15366b"
-  }
-]
-
 const stateContext = createContext({})
 const trajectoryContext = createContext({})
 const obstacleContext = createContext({})
@@ -50,7 +35,7 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
     }
   });
   const [trajectories, setTrajectories] = useState<Trajectory[]>([])
-  const [obstacles, setObstacles] = useState<Obstacle[]>(defaultObstacles)
+  const [obstacles, setObstacles] = useState<Obstacle[]>([])
 
   const loadTrajectories = async () => {
     let files: string[] = []

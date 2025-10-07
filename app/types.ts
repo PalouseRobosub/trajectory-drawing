@@ -85,9 +85,9 @@ export enum ObstacleShape {
   Cylinder,
 }
 
-export type BoxArgs = {width: number | undefined, height: number | undefined, depth: number | undefined, widthSegments: number | undefined, heightSegments: number | undefined, depthSegments: number | undefined}
+export type BoxArgs = {width: number | undefined, height: number | undefined, depth: number | undefined}
 
-export type SphereArgs = {radius: number | undefined, widthSegments: number | undefined, heightSegments: number | undefined, phiStart: number | undefined, phiLength: number | undefined, thetaStart: number | undefined, thetaLength: number | undefined}
+export type SphereArgs = {radius: number | undefined}
 
-export type CylinderArgs = {radiusTop: number | undefined, radiusBottom: number | undefined, height: number | undefined, radialSegments: number | undefined, heightSegments: number | undefined, openEnded: boolean | undefined, thetaStart: number | undefined, thetaLength: number | undefined}
+export type CylinderArgs = {radiusTop: number | undefined, radiusBottom: number | undefined, height: number | undefined}
 
