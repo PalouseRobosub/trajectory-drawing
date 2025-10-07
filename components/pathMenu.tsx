@@ -257,7 +257,7 @@ const PathMenu = () => {
                              onChange={(e) => setHoldTime(parseFloat(e.target.value), i)}/>
                     </TableCell>
                     <TableCell>
-                      <Input type="checkbox" defaultChecked={waypoint.bezier}
+                      <Input type="checkbox" checked={waypoint.bezier}
                              onChange={(e) => setBezier(e.target.checked as unknown as boolean, i)}/>
                     </TableCell>
                     <TableCell>

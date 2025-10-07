@@ -73,7 +73,7 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
         trajectory: trajectory,
       }
 
-      await fetch(`/api/${state.pathFiles[index]}`, {method: "PUT", body: JSON.stringify(data)}).then((res) => res.text()).then(text => console.log(text))
+      await fetch(`/api/${state.pathFiles[index]}`, {method: "PUT", body: JSON.stringify(data, null, 2)}).then((res) => res.text()).then(text => console.log(text))
     }
     setState({...state, unsaved: false})
   }
