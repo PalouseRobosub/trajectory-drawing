@@ -82,12 +82,10 @@ jobs:
       # === Package artifact ===
       - name: Package binary
         run: |
-          mkdir -p dist
-          cp dist/app dist/
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            powershell Compress-Archive -Path dist\app.exe -DestinationPath app-${{ matrix.os }}-v${{ steps.version.outputs.version }}.zip
+            powershell Compress-Archive -Path dist\main.exe -DestinationPath app-${{ matrix.os }}-v${{ steps.version.outputs.version }}.zip
           else
-            tar -czf app-${{ matrix.os }}-v${{ steps.version.outputs.version }}.tar.gz -C dist app
+            tar -czf app-${{ matrix.os }}-v${{ steps.version.outputs.version }}.tar.gz -C dist main
           fi
 
       - name: Upload artifact (for release aggregation)
