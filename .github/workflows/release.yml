@@ -75,7 +75,7 @@ jobs:
         run: pip install -r requirements.txt pyinstaller
 
       - name: Build executable
-        working-directory: backend
+        working-directory: .
         run: |
           pyinstaller main.spec
 
@@ -83,7 +83,7 @@ jobs:
       - name: Package binary
         run: |
           mkdir -p dist
-          cp backend/dist/app dist/
+          cp dist/app dist/
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
             powershell Compress-Archive -Path dist\app.exe -DestinationPath app-${{ matrix.os }}-v${{ steps.version.outputs.version }}.zip
           else
