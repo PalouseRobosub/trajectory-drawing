@@ -58,7 +58,7 @@ jobs:
           cache-dependency-path: package-lock.json
 
       - name: Install frontend deps
-        working-directory: /
+        working-directory: .
         run: npm ci
 
       - name: Build frontend
