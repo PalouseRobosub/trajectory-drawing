@@ -2,10 +2,10 @@
 
 
 a = Analysis(
-    ['/Users/asorge/github/trajectory-drawing/main.py'],
+    ['./main.py'],
     pathex=[],
     binaries=[],
-    datas=[('/Users/asorge/github/trajectory-drawing/out', './out')],
+    datas=[('./out', './out')],
     hiddenimports=['flask'],
     hookspath=[],
     hooksconfig={},
