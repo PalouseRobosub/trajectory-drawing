@@ -84,7 +84,7 @@ jobs:
         shell: bash
         run: |
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            powershell Compress-Archive -Path dist\main.exe -DestinationPath app-${{ matrix.os }}-v${{ steps.version.outputs.version }}.zip
+            powershell Compress-Archive -Path dist\main\main.exe -DestinationPath app-${{ matrix.os }}-v${{ steps.version.outputs.version }}.zip
           else
             tar -czf app-${{ matrix.os }}-v${{ steps.version.outputs.version }}.tar.gz -C dist main
           fi
