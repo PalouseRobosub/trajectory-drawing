@@ -1,4 +1,3 @@
-import {Input} from "@/components/ui/input";
 import {Switch} from "@/components/ui/switch";
 import {Label} from "@/components/ui/label";
 import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group";
@@ -18,7 +17,7 @@ const SettingsMenu = () => {
       </div>
       <div className="flex flex-row items-center gap-2 text-nowrap">
         <Label htmlFor="dots">Dot Waypoints:</Label>
-        <Input type="checkbox" id="dots" className="min-w-32 w-full accent-neutral-900" defaultChecked={state.waypointOptions.dotWaypoints} onChange={(e) => setState({...state, waypointOptions: {...state.waypointOptions, dotWaypoints: e.target.checked}})} />
+        <Switch id="dots" className="data-[state=checked]:bg-green-400" checked={state.waypointOptions.dotWaypoints} onCheckedChange={(checked) => setState({...state, waypointOptions: {...state.waypointOptions, dotWaypoints: checked}})} />
       </div>
       <div className="flex flex-row items-center gap-2 text-nowrap">
         Waypoint Labels:
@@ -36,6 +35,10 @@ const SettingsMenu = () => {
             <Label htmlFor="name">Name</Label>
           </div>
         </RadioGroup>
+      </div>
+      <div className="flex flex-row items-center gap-2 text-nowrap">
+        <Label htmlFor="gizmos">Show Gizmos:</Label>
+        <Switch id="gizmos" className="data-[state=checked]:bg-green-400" checked={state.showGizmos} onCheckedChange={(checked) => setState({...state, showGizmos: checked})} />
       </div>
     </div>
   )

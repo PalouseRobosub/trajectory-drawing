@@ -1,7 +1,7 @@
 'use client'
 
 import {Canvas} from "@react-three/fiber";
-import {Suspense, useRef} from "react";
+import {Suspense} from "react";
 import {OrbitControls, Text} from "@react-three/drei";
 import Axis from "@/components/axis"
 import * as THREE from "three";
@@ -10,14 +10,14 @@ import Pool from "@/components/pool";
 import Path from "@/components/path";
 import Sidebar from "@/components/sidebar";
 import Obstacles from "@/components/obstacles";
-// import SubController, {SubHandle} from "@/components/subController";
+import Playback from "@/components/playback";
+import Guppie from "@/components/guppie";
 
 export default function Home() {
 
   // set vertical axis to z because i'm not insane
   THREE.Object3D.DEFAULT_UP = new THREE.Vector3(0, 0, 1);
 
-  // const animRef = useRef<SubHandle>(null);
   const { state } = useStateContext();
   const { trajectories } = useTrajectoryContext()
 
@@ -51,12 +51,10 @@ export default function Home() {
                 )
               })
             }
-            {/*<SubController*/}
-            {/*  ref={animRef}*/}
-            {/*  loop={true}*/}
-            {/*/>*/}
+            {state.showSubModel && trajectories[state.subPath] && <Guppie startPos={trajectories[state.subPath].waypoints[state.subPoint].position}/>}
           </Suspense>
         </Canvas>
+      {state.showSubModel && trajectories[state.subPath] && <Playback/>}
     </div>
   );
 }

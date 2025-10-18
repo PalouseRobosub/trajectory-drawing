@@ -1,6 +1,5 @@
-import {Box, Cone, Cylinder, Edges, Sphere, Torus} from "@react-three/drei";
+import {Box, Cone, Cylinder, Edges, Torus} from "@react-three/drei";
 import {Waypoint} from "@/app/types";
-import {RefObject} from "react";
 import {cartToArray} from "@/lib/cords";
 import * as THREE from "three";
 import {inToM} from "@/lib/conversions";
@@ -316,10 +315,10 @@ const Hull = ({ position }: { position: [number, number, number] }) => {
   );
 };
 
-const Guppie = ({ ref, startPos }: { ref: RefObject<THREE.Group|null>, startPos: Waypoint["position"]}) => {
+const Guppie = ({ startPos }: { startPos: Waypoint["position"]}) => {
   return (
     //  guppie parent group
-    <group position={cartToArray(startPos)} ref={ref}>
+    <group position={cartToArray(startPos)}>
 
       {/* hulls */}
       <group position={hullGroupPos}>

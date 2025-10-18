@@ -1,6 +1,6 @@
 import {useObstacleContext} from "@/components/context";
 import {BoxArgs, CylinderArgs, ObstacleShape, SphereArgs} from "@/app/types";
-import {Box, Cylinder, Sphere} from "@react-three/drei";
+import {Box, Cylinder, Edges, Sphere} from "@react-three/drei";
 import {cartToArray} from "@/lib/cords";
 
 
@@ -22,6 +22,7 @@ const Obstacles = () => {
                 position={cartToArray(obstacle.position)}
               >
                 <meshBasicMaterial color={obstacle.color} />
+                <Edges color="black" />
               </Sphere>
             )
           case ObstacleShape.Cylinder:
@@ -33,6 +34,7 @@ const Obstacles = () => {
                 position={cartToArray(obstacle.position)}
               >
                 <meshBasicMaterial color={obstacle.color} />
+                <Edges color="black" />
               </Cylinder>
             )
           case ObstacleShape.Box:
@@ -44,6 +46,7 @@ const Obstacles = () => {
                 position={cartToArray(obstacle.position)}
               >
                 <meshBasicMaterial color={obstacle.color} />
+                <Edges color="black" />
               </Box>
             )
         }

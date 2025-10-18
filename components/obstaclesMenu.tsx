@@ -41,9 +41,29 @@ const ObstaclesMenu = () => {
 
   const setShape = (shape: ObstacleShape, index: number) => {
     const newObstacles = [...obstacles];
+    let args;
+    switch (shape) {
+      case ObstacleShape.Sphere: args = {
+        radius: 0.5
+      }
+      break;
+      case ObstacleShape.Cylinder: args = {
+        radiusTop: 0.5,
+        radiusBottom: 0.5,
+        height: 1
+      }
+      break;
+      case ObstacleShape.Box: args = {
+        width: 1,
+        height: 1,
+        depth: 1
+      }
+      break;
+    }
     newObstacles[index] = {
       ...newObstacles[index],
       shape: shape,
+      args: args
     }
 
     setObstacles(newObstacles);
