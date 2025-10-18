@@ -4,12 +4,13 @@ import {useStateContext, useTrajectoryContext} from "@/components/context";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Input} from "@/components/ui/input";
 import {useEffect, useState} from "react";
-import {Folder, Save, Settings, TrafficCone, Waves, Waypoints} from "lucide-react";
+import {Folder, Save, Settings, Ship, TrafficCone, Waves, Waypoints} from "lucide-react";
 import PoolMenu from "@/components/poolMenu";
 import PathMenu from "@/components/pathMenu";
 import SettingsMenu from "@/components/settingsMenu";
 import {Button} from "@/components/ui/button";
 import ObstaclesMenu from "@/components/obstaclesMenu";
+import SubMenu from "@/components/subMenu";
 
 const TrajectoryList = () => {
 
@@ -99,6 +100,9 @@ const Sidebar = () => {
       content = <ObstaclesMenu />
       break;
     case 5:
+      content = <SubMenu />
+      break;
+    case 6:
       content = <SettingsMenu />
       break;
   }
@@ -120,6 +124,9 @@ const Sidebar = () => {
             <TrafficCone className="w-8 h-8" />
           </div>
           <div className={`p-2 hover:bg-gray-300 hover:cursor-pointer ${openMenu === 5 ? "bg-gray-300" : ""}`} onClick={() => setOpenMenu((prev) => prev === 5 ? 0 : 5)}>
+            <Ship className="w-8 h-8" />
+          </div>
+          <div className={`p-2 hover:bg-gray-300 hover:cursor-pointer ${openMenu === 6 ? "bg-gray-300" : ""}`} onClick={() => setOpenMenu((prev) => prev === 6 ? 0 : 6)}>
             <Settings className="w-8 h-8" />
           </div>
         </div>

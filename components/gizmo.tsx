@@ -14,27 +14,6 @@ const Gizmo = ({ waypointIndex, trajectoryIndex }: { waypointIndex: number, traj
   const [dragLimits, setDragLimits] = useState<AxisLimits>(undefined);
   const dragRef = useRef<Group>(null);
 
-  // useEffect(() => {
-  //   if (!dragRef.current) return;
-  //   const position = waypoints[waypointIndex].controlPoint;
-  //   const vector = new Vector3(position.x, position.y, position.z);
-  //   const matrix = new Matrix4().setPosition(vector);
-  //   dragRef.current.matrix.copy(matrix);
-  // }, [])
-  //
-  // const updatePos = () => {
-  //   if (!dragRef.current) return;
-  //   const newWaypoints = [...waypoints];
-  //   const matrix = dragRef.current.matrixWorld;
-  //   const vector = new THREE.Vector3();
-  //   vector.setFromMatrixPosition(matrix);
-  //   newWaypoints[waypointIndex] = {
-  //     ...newWaypoints[waypointIndex],
-  //     controlPoint: vector
-  //   }
-  //   setWaypoints(newWaypoints);
-  // }
-
   useEffect(() => {
     if (!dragRef.current) return;
     const waypoint = trajectories[trajectoryIndex].waypoints[waypointIndex];
@@ -42,7 +21,7 @@ const Gizmo = ({ waypointIndex, trajectoryIndex }: { waypointIndex: number, traj
     const vector = new Vector3(position.x, position.y, position.z);
     const matrix = new Matrix4().setPosition(vector);
     dragRef.current.matrix.copy(matrix);
-  }, [])
+  }, []) // eslint-disable-line
 
   const updatePos = () => {
     if (!dragRef.current) return;

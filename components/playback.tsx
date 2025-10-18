@@ -1,36 +1,20 @@
-// 'use client'
-//
-// import {Button} from "@/components/ui/button";
-// import {Pause, Play} from "lucide-react";
-// import {Slider} from "@/components/ui/slider";
-// import {useStateContext} from "@/components/context";
-// import {RefObject, useState} from "react";
-// import {SubHandle} from "@/components/subController";
-//
-// const Playback = ({ animRef }: { animRef: RefObject<SubHandle|null>}) => {
-//
-//   const [playing, setPlaying] = useState(false);
-//
-//   const { state, setState } = useStateContext()
-//
-//   const changeAnimState = () => {
-//     if (!animRef.current) return;
-//     const playing = animRef.current.getPlayingState()
-//     setPlaying(!playing)
-//     if (playing) animRef.current.pause(); else animRef.current.play()
-//   }
-//
-//   return (
-//     <div className="fixed bottom-0 w-screen flex flex-row justify-center z-20 pb-2 gap-4">
-//       <div className="bg-white p-2 flex flex-row gap-2 text-lg rounded-xl">
-//         <Button onClick={changeAnimState} className="cursor-pointer">
-//           {playing ? <Pause/> : <Play/>}
-//         </Button>
-//         <Slider className="w-[50vw]" min={0} max={state.totalTime} step={0.1} value={[state.totalElapsed]} disabled onValueChange={(number) => setState({...state, elapsed: number[0]})} />
-//         <div className="font-mono">{state.totalElapsed.toFixed(2)}s / {state.totalTime.toFixed(2)}s</div>
-//       </div>
-//     </div>
-//   )
-// }
-//
-// export default Playback
+'use client'
+
+import {Slider} from "@/components/ui/slider";
+import {useStateContext, useTrajectoryContext} from "@/components/context";
+
+const Playback = () => {
+
+  const { state, setState } = useStateContext()
+  const { trajectories } = useTrajectoryContext()
+
+  return (
+    <div className="fixed bottom-0 w-screen flex flex-row justify-center z-20 pb-2 gap-4">
+      <div className="bg-white p-2 flex flex-row gap-2 text-lg rounded-xl">
+        <Slider className="w-[50vw] p-2" min={0} max={trajectories[state.subPath].waypoints.length-1} onValueChange={(value) => setState({...state, subPoint: value[0]})} />
+      </div>
+    </div>
+  )
+}
+
+export default Playback

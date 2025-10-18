@@ -55,6 +55,10 @@ export interface State {
   displayPaths: boolean[];
   autosave: boolean;
   unsaved: boolean;
+  showSubModel: boolean;
+  subPath: number;
+  subPoint: number;
+  showGizmos: boolean;
 }
 
 export interface Obstacle {

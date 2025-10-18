@@ -74,19 +74,23 @@ const Path = ({ waypoints, index }: { waypoints: Waypoint[], index: number }) =>
                   color={colors[index%colors.length]}
                   lineWidth={4}
                 />
-                <Gizmo waypointIndex={i} trajectoryIndex={index} />
-                <Line
-                  points={[
-                    cartToArray(waypoint.position),
-                    cartToArray(waypoint.controlPoint),
-                    cartToArray(waypoints[i + 1].position)
-                  ]}
-                  color="black"
-                  lineWidth={4}
-                  dashed
-                  dashSize={0.5}
-                  gapSize={0.2}
-                />
+                {state.showGizmos &&
+                  <>
+                    <Gizmo waypointIndex={i} trajectoryIndex={index} />
+                    <Line
+                      points={[
+                        cartToArray(waypoint.position),
+                        cartToArray(waypoint.controlPoint),
+                        cartToArray(waypoints[i + 1].position)
+                      ]}
+                      color="black"
+                      lineWidth={4}
+                      dashed
+                      dashSize={0.5}
+                      gapSize={0.2}
+                    />
+                  </>
+                }
               </>
             }
 

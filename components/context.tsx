@@ -18,6 +18,10 @@ const defaultState: State = {
   displayPaths: [],
   autosave: true,
   unsaved: false,
+  showSubModel: false,
+  subPath: -1,
+  subPoint: 0,
+  showGizmos: true,
 }
 
 const stateContext = createContext({})
@@ -69,15 +73,15 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
 
   useEffect(() => {
     loadTrajectories()
-  }, []);
+  }, []); // eslint-disable-line
 
   useEffect(() => {
     if (!state.autosave) setState({...state, unsaved: true})
-  }, [trajectories]);
+  }, [trajectories]); // eslint-disable-line
 
   useEffect(() => {
     if (state.autosave) saveTrajectories()
-  }, [trajectories])
+  }, [trajectories]) // eslint-disable-line
 
   return (
     <stateContext.Provider value={{ state, setState }}>
