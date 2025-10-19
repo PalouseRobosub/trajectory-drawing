@@ -81,19 +81,25 @@ jobs:
 
       # === Package artifact ===
       - name: Package binary
+        id: package
         shell: bash
         run: |
+          os_name="${{ matrix.os }}"
+          os_name="${os_name%-latest}"
+          echo "os_name=$os_name" >> "$GITHUB_OUTPUT"
+          
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            powershell Compress-Archive -Path dist\\main.exe -DestinationPath app-${{ matrix.os }}-v${{ steps.version.outputs.version }}.zip
+            powershell Compress-Archive -Path dist\\main.exe -DestinationPath robosub-trajectory-drawing-${os_name}-v${{ steps.version.outputs.version }}.zip
           else
-            tar -czf app-${{ matrix.os }}-v${{ steps.version.outputs.version }}.tar.gz -C dist main
+            tar -czf robosub-trajectory-drawing-${os_name}-v${{ steps.version.outputs.version }}.tar.gz -C dist main
           fi
 
       - name: Upload artifact (for release aggregation)
         uses: actions/upload-artifact@v4
         with:
-          name: app-${{ matrix.os }}
-          path: app-${{ matrix.os }}-v${{ steps.version.outputs.version }}.${{ matrix.ext }}
+          name: app-${{ steps.package.outputs.os_name }}
+          path: robosub-trajectory-drawing-${{ steps.package.outputs.os_name }}-v${{ steps.version.outputs.version }}.${{ matrix.ext }}
+
 
   release:
     needs: build
