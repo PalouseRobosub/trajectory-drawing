@@ -1,8 +1,8 @@
 import {Box, Cone, Cylinder, Edges, Torus} from "@react-three/drei";
 import {Waypoint} from "@/app/types";
-import {cartToArray} from "@/lib/cords";
 import * as THREE from "three";
 import {inToM} from "@/lib/conversions";
+import {Quaternion, Vector3} from "three";
 
 // in INCHES
 const guppieParams = {
@@ -315,10 +315,15 @@ const Hull = ({ position }: { position: [number, number, number] }) => {
   );
 };
 
-const Guppie = ({ startPos }: { startPos: Waypoint["position"]}) => {
+const Guppie = ({ waypoint, pos }: { waypoint: Waypoint, pos: Vector3 }) => {
+  // const quat = new Quaternion(waypoint.orientation.x, waypoint.orientation.y, waypoint.orientation.z, waypoint.orientation.w).normalize();
   return (
     //  guppie parent group
-    <group position={cartToArray(startPos)}>
+    <group
+      position={pos}
+      // position={cartToArray(waypoint.position)}
+      // quaternion={quat}
+    >
 
       {/* hulls */}
       <group position={hullGroupPos}>

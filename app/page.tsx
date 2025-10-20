@@ -5,7 +5,7 @@ import {Suspense} from "react";
 import {OrbitControls, Text} from "@react-three/drei";
 import Axis from "@/components/axis"
 import * as THREE from "three";
-import {useStateContext, useTrajectoryContext} from "@/components/context";
+import {useStateContext, useSubPointsContext, useTrajectoryContext} from "@/components/context";
 import Pool from "@/components/pool";
 import Path from "@/components/path";
 import Sidebar from "@/components/sidebar";
@@ -20,6 +20,7 @@ export default function Home() {
 
   const { state } = useStateContext();
   const { trajectories } = useTrajectoryContext()
+  const { subPoints } = useSubPointsContext()
 
   return (
     <div className="h-screen w-full bg-neutral-300 fixed inset-0 z-0 flex flex-row">
@@ -51,7 +52,7 @@ export default function Home() {
                 )
               })
             }
-            {state.showSubModel && trajectories[state.subPath] && <Guppie startPos={trajectories[state.subPath].waypoints[state.subPoint].position}/>}
+            {state.showSubModel && trajectories[state.subPath] && <Guppie waypoint={trajectories[state.subPath].waypoints[state.subPoint]} pos={subPoints[state.subPoint]}/>}
           </Suspense>
         </Canvas>
       {state.showSubModel && trajectories[state.subPath] && <Playback/>}

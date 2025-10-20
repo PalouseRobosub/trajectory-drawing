@@ -29,12 +29,11 @@ const SubMenu = () => {
       {state.showSubModel &&
         <Select
           onValueChange={(value) => {
-            console.log(parseInt(value))
             setState({...state, subPath: parseInt(value)})
           }}
           defaultValue={state.subPath.toString()}
         >
-          <SelectTrigger className="w-3/4">
+          <SelectTrigger className="min-w-3/4">
             <SelectValue placeholder="Select Trajectory"/>
           </SelectTrigger>
           <SelectContent>

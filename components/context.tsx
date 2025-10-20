@@ -2,6 +2,8 @@
 
 import {createContext, useContext, useEffect, useState} from "react";
 import {Obstacle, State, Trajectory} from "@/app/types";
+import {Vector3} from "three";
+import * as THREE from "three";
 
 const defaultState: State = {
   poolDimensions: {
@@ -27,6 +29,7 @@ const defaultState: State = {
 const stateContext = createContext({})
 const trajectoryContext = createContext({})
 const obstacleContext = createContext({})
+const subPointsContext = createContext({})
 
 const Context = ({ children }: { children: React.ReactNode } ) => {
 
@@ -40,6 +43,7 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
   });
   const [trajectories, setTrajectories] = useState<Trajectory[]>([])
   const [obstacles, setObstacles] = useState<Obstacle[]>([])
+  const [subPoints, setSubPoints] = useState<Vector3[]>([])
 
   const loadTrajectories = async () => {
     let files: string[] = []
@@ -83,11 +87,63 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
     if (state.autosave) saveTrajectories()
   }, [trajectories]) // eslint-disable-line
 
+  useEffect(() => {
+    if (!state.showSubModel) return;
+    if (state.subPath === -1) return;
+    if (!trajectories[state.subPath]) return;
+
+    const traj = trajectories[state.subPath];
+
+    const points: Vector3[] = []
+
+    traj.waypoints.forEach((waypoint, i) => {
+      if (i === traj.waypoints.length - 1) return;
+
+      const next = traj.waypoints[i + 1];
+      let segPoints: THREE.Vector3[];
+
+      if (waypoint.bezier) {
+        const curve = new THREE.QuadraticBezierCurve3(
+          new THREE.Vector3(waypoint.position.x, waypoint.position.y, waypoint.position.z),
+          new THREE.Vector3(waypoint.controlPoint.x, waypoint.controlPoint.y, waypoint.controlPoint.z),
+          new THREE.Vector3(next.position.x, next.position.y, next.position.z)
+        );
+
+        const len = Math.floor(curve.getLength());
+        segPoints = curve.getSpacedPoints(len * 2);
+      } else {
+        const start = new THREE.Vector3(
+          waypoint.position.x,
+          waypoint.position.y,
+          waypoint.position.z
+        );
+        const end = new THREE.Vector3(
+          next.position.x,
+          next.position.y,
+          next.position.z
+        );
+
+        const lineCurve = new THREE.LineCurve3(start, end);
+        const len = Math.floor(lineCurve.getLength());
+        segPoints = lineCurve.getSpacedPoints(len * 2);
+      }
+
+      points.push(...segPoints);
+
+    });
+
+    setSubPoints(points);
+
+  }, [state.showSubModel, state.subPath, trajectories]);
+
+
   return (
     <stateContext.Provider value={{ state, setState }}>
       <trajectoryContext.Provider value={{ trajectories, setTrajectories }}>
         <obstacleContext.Provider value={{ obstacles, setObstacles }}>
-          {children}
+          <subPointsContext.Provider value={{ subPoints, setSubPoints }}>
+            {children}
+          </subPointsContext.Provider>
         </obstacleContext.Provider>
       </trajectoryContext.Provider>
     </stateContext.Provider>
@@ -97,5 +153,6 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
 const useStateContext = () => useContext(stateContext) as { state: State , setState: (state: State) => void }
 const useTrajectoryContext = () => useContext(trajectoryContext) as { trajectories: Trajectory[], setTrajectories: (trajectories: Trajectory[]) => void }
 const useObstacleContext = () => useContext(obstacleContext) as { obstacles: Obstacle[], setObstacles: (obstacles: Obstacle[]) => void }
+const useSubPointsContext = () => useContext(subPointsContext) as { subPoints: Vector3[], setSubPoints: (subPoints: Vector3[]) => void }
 
-export { Context, useStateContext, useTrajectoryContext, useObstacleContext }
+export { Context, useStateContext, useTrajectoryContext, useObstacleContext, useSubPointsContext }

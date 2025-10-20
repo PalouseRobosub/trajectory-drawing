@@ -13,8 +13,8 @@
           "z": 0
         },
         "orientation": {
-          "x": 0,
-          "y": 0,
+          "x": 3,
+          "y": 3,
           "z": 0,
           "w": 1
         },
@@ -36,14 +36,14 @@
           "z": -4
         },
         "orientation": {
-          "x": 0,
+          "x": 7,
           "y": 0,
-          "z": 0,
-          "w": 1
+          "z": 4,
+          "w": 14
         },
         "velocity": 1,
         "hold_time": 0,
-        "bezier": false,
+        "bezier": true,
         "controlPoint": {
           "x": 0,
           "y": 0,
@@ -60,7 +60,7 @@
         },
         "orientation": {
           "x": 0,
-          "y": 0,
+          "y": 45,
           "z": 0,
           "w": 1
         },
@@ -82,10 +82,10 @@
           "z": -3
         },
         "orientation": {
-          "x": 0,
+          "x": 34,
           "y": 0,
           "z": 0,
-          "w": 1
+          "w": 5
         },
         "velocity": 1,
         "hold_time": 0,
@@ -108,7 +108,7 @@
           "x": 0,
           "y": 0,
           "z": 0,
-          "w": 1
+          "w": 18
         },
         "velocity": 1,
         "hold_time": 0,
@@ -128,9 +128,9 @@
           "z": 0
         },
         "orientation": {
-          "x": 0,
+          "x": 6,
           "y": 0,
-          "z": 0,
+          "z": 5,
           "w": 1
         },
         "velocity": 1,
