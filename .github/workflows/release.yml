@@ -6,7 +6,41 @@ on:
   workflow_dispatch:
 
 jobs:
+  check:
+    name: Check version and tag
+    runs-on: ubuntu-latest
+    outputs:
+      skip: ${{ steps.tag-check.outputs.skip }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # === Extract version from package.json ===
+      - name: Get version
+        id: version
+        shell: bash
+        run: |
+          VERSION=$(jq -r .version package.json)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      # === Skip if tag already exists ===
+      - name: Check for existing tag
+        id: tag-check
+        shell: bash
+        run: |
+          if git rev-parse "v${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
+            echo "Tag v${{ steps.version.outputs.version }} already exists."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
   build:
+    needs: check
+    if: needs.check.outputs.skip != 'true'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -32,25 +66,6 @@ jobs:
         run: |
           VERSION=$(jq -r .version package.json)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-      # === Skip if tag already exists ===
-      - name: Check for existing tag
-        id: tag-check
-        shell: bash
-        run: |
-          if git rev-parse "v${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
-            echo "Tag already exists."
-            echo "skip=true" >> $GITHUB_OUTPUT
-          else
-            echo "skip=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Stop if already released
-        if: steps.tag-check.outputs.skip == 'true'
-        uses: styfle/cancel-workflow-action@0.12.1
-        with:
-          workflow_id: ${{ github.run_id }}
-
 
       # === FRONTEND BUILD ===
       - name: Set up Node
@@ -106,6 +121,7 @@ jobs:
 
   release:
     needs: build
+    if: needs.check.outputs.skip != 'true'
     runs-on: ubuntu-latest
 
     steps:
