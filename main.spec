@@ -13,7 +13,6 @@ a = Analysis(
     ['./main.py'],
     pathex=[],
     binaries=[],
-    name='robosub-trajectory-drawing',
     datas=[('./out', './out')],
     hiddenimports=['flask'],
     hookspath=[],
@@ -22,7 +21,6 @@ a = Analysis(
     excludes=[],
     noarchive=False,
     optimize=0,
-    icon=icon_file,
 )
 pyz = PYZ(a.pure)
 
@@ -32,7 +30,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='main',
+    name='robosub-trajectory-drawing',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -45,4 +43,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=icon_file,
 )

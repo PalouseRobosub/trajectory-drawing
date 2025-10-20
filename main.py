@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 import sys
-
 from flask import Flask, send_from_directory, abort, Response, request
 from pathlib import Path
 import os
-import json
 import webbrowser
 
 app = Flask(__name__)
@@ -13,6 +11,9 @@ if getattr(sys, 'frozen', False):
     cwd = sys._MEIPASS
 else:
     cwd = Path(__file__).resolve().parent
+
+paths_folder = Path(os.getcwd()) / "paths"
+paths_folder.mkdir(parents=True, exist_ok=True)
 
 def check_safe(filename):
     parent = Path(os.getcwd() + "/paths").resolve()
@@ -76,6 +77,6 @@ def delete(path):
     os.remove(filepath)
     return Response(f"removed {filepath}\n", headers={"Content-Type":"text/plain"})
 
-# webbrowser.open("http://localhost:8081")
+webbrowser.open("http://localhost:8081")
 
 app.run(port=8081, host="")
