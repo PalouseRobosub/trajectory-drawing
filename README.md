@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Trajectory Drawing
+
+A browser interface to create and edit JSON files containing paths for the sub.
 
 ## Getting Started
 
-First, run the development server:
+To get started, download the latest [release](https://github.com/PalouseRobosub/trajectory-drawing/releases)
+for your platform. There are precompiled binaries for macOS, Windows, and Linux.
+Once downloaded, unpack the archive, optionally move the app to the same directory
+of your preexisting folder of paths, and launch the app. The app will automatically
+open [localhost:8081](https://localhost:8081) in your default browser.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Usage
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The 3D viewport displays a set of axes, the outline of the pool, and any enabled
+trajectories.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Sidebar
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The sidebar contains multiple menus, as well as the save button and indicator
+at the bottom left. A red dot indicates unsaved changes. Autosave can be enabled
+in the settings menu.
 
-## Learn More
+#### Loaded Trajectories
 
-To learn more about Next.js, take a look at the following resources:
+![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtZm9sZGVyLWljb24gbHVjaWRlLWZvbGRlciI+PHBhdGggZD0iTTIwIDIwYTIgMiAwIDAgMCAyLTJWOGEyIDIgMCAwIDAtMi0yaC03LjlhMiAyIDAgMCAxLTEuNjktLjlMOS42IDMuOUEyIDIgMCAwIDAgNy45MyAzSDRhMiAyIDAgMCAwLTIgMnYxM2EyIDIgMCAwIDAgMiAyWiIvPjwvc3ZnPg==)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Displays a table of the `.json` files in the `paths/` folder. Checkbox color corresponds
+to the color of the rendered line. Use the checkboxes to show/hide paths in the
+3D viewport.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+#### Pool Setup
 
-## Deploy on Vercel
+![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtd2F2ZXMtaWNvbiBsdWNpZGUtd2F2ZXMiPjxwYXRoIGQ9Ik0yIDZjLjYuNSAxLjIgMSAyLjUgMUM3IDcgNyA1IDkuNSA1YzIuNiAwIDIuNCAyIDUgMiAyLjUgMCAyLjUtMiA1LTIgMS4zIDAgMS45LjUgMi41IDEiLz48cGF0aCBkPSJNMiAxMmMuNi41IDEuMiAxIDIuNSAxIDIuNSAwIDIuNS0yIDUtMiAyLjYgMCAyLjQgMiA1IDIgMi41IDAgMi41LTIgNS0yIDEuMyAwIDEuOS41IDIuNSAxIi8+PHBhdGggZD0iTTIgMThjLjYuNSAxLjIgMSAyLjUgMSAyLjUgMCAyLjUtMiA1LTIgMi42IDAgMi40IDIgNSAyIDIuNSAwIDIuNS0yIDUtMiAxLjMgMCAxLjkuNSAyLjUgMSIvPjwvc3ZnPg==)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Set the dimensions of the pool.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#### Trajectory Editor
+
+![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtd2F5cG9pbnRzLWljb24gbHVjaWRlLXdheXBvaW50cyI+PGNpcmNsZSBjeD0iMTIiIGN5PSI0LjUiIHI9IjIuNSIvPjxwYXRoIGQ9Im0xMC4yIDYuMy0zLjkgMy45Ii8+PGNpcmNsZSBjeD0iNC41IiBjeT0iMTIiIHI9IjIuNSIvPjxwYXRoIGQ9Ik03IDEyaDEwIi8+PGNpcmNsZSBjeD0iMTkuNSIgY3k9IjEyIiByPSIyLjUiLz48cGF0aCBkPSJtMTMuOCAxNy43IDMuOS0zLjkiLz48Y2lyY2xlIGN4PSIxMiIgY3k9IjE5LjUiIHI9IjIuNSIvPjwvc3ZnPg==)
+
+After selecting a trajectory from dropdown, you can make edits to the waypoints,
+which will be displayed in realtime.
+
+#### Obstacles
+
+![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtdHJhZmZpYy1jb25lLWljb24gbHVjaWRlLXRyYWZmaWMtY29uZSI+PHBhdGggZD0iTTE2LjA1IDEwLjk2NmE1IDIuNSAwIDAgMS04LjEgMCIvPjxwYXRoIGQ9Im0xNi45MjMgMTQuMDQ5IDQuNDggMi4wNGExIDEgMCAwIDEgLjAwMSAxLjgzMWwtOC41NzQgMy45YTIgMiAwIDAgMS0xLjY2IDBsLTguNTc0LTMuOTFhMSAxIDAgMCAxIDAtMS44M2w0LjQ4NC0yLjA0Ii8+PHBhdGggZD0iTTE2Ljk0OSAxNC4xNGE1IDIuNSAwIDEgMS05LjkgMEwxMC4wNjMgMy41YTIgMiAwIDAgMSAzLjg3NCAweiIvPjxwYXRoIGQ9Ik05LjE5NCA2LjU3YTUgMi41IDAgMCAwIDUuNjEgMCIvPjwvc3ZnPg==)
+
+Add obstacles and other objects to the pool. Currently supported shapes are sphere,
+box, and cylinder.
+
+#### Sub Model
+
+![Test](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtc2hpcC1pY29uIGx1Y2lkZS1zaGlwIj48cGF0aCBkPSJNMTIgMTAuMTg5VjE0Ii8+PHBhdGggZD0iTTEyIDJ2MyIvPjxwYXRoIGQ9Ik0xOSAxM1Y3YTIgMiAwIDAgMC0yLTJIN2EyIDIgMCAwIDAtMiAydjYiLz48cGF0aCBkPSJNMTkuMzggMjBBMTEuNiAxMS42IDAgMCAwIDIxIDE0bC04LjE4OC0zLjYzOWEyIDIgMCAwIDAtMS42MjQgMEwzIDE0YTExLjYgMTEuNiAwIDAgMCAyLjgxIDcuNzYiLz48cGF0aCBkPSJNMiAyMWMuNi41IDEuMiAxIDIuNSAxIDIuNSAwIDIuNS0yIDUtMiAxLjMgMCAxLjkuNSAyLjUgMXMxLjIgMSAyLjUgMWMyLjUgMCAyLjUtMiA1LTIgMS4zIDAgMS45LjUgMi41IDEiLz48L3N2Zz4=)
+
+Choose to optionally display the model of Guppie, and which path it should follow.
+
+#### Settings
+
+![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtc2V0dGluZ3MtaWNvbiBsdWNpZGUtc2V0dGluZ3MiPjxwYXRoIGQ9Ik05LjY3MSA0LjEzNmEyLjM0IDIuMzQgMCAwIDEgNC42NTkgMCAyLjM0IDIuMzQgMCAwIDAgMy4zMTkgMS45MTUgMi4zNCAyLjM0IDAgMCAxIDIuMzMgNC4wMzMgMi4zNCAyLjM0IDAgMCAwIDAgMy44MzEgMi4zNCAyLjM0IDAgMCAxLTIuMzMgNC4wMzMgMi4zNCAyLjM0IDAgMCAwLTMuMzE5IDEuOTE1IDIuMzQgMi4zNCAwIDAgMS00LjY1OSAwIDIuMzQgMi4zNCAwIDAgMC0zLjMyLTEuOTE1IDIuMzQgMi4zNCAwIDAgMS0yLjMzLTQuMDMzIDIuMzQgMi4zNCAwIDAgMCAwLTMuODMxQTIuMzQgMi4zNCAwIDAgMSA2LjM1IDYuMDUxYTIuMzQgMi4zNCAwIDAgMCAzLjMxOS0xLjkxNSIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiLz48L3N2Zz4=)
+
+Enable/disable autosave, and choose to show or hide waypoint labels, waypoint dots,
+and bezier gizmos.
+
+## Upcoming Features
+
+- [ ] Make the loaded trajectory menu look better (collapsing folders etc.)
+- [ ] `poolsetup.json` to save obstacles and pool options
+- [ ] Automatic collision warnings (path exits water etc.)
+- [ ] Sub model shows correct orientation
+- [ ] Create new trajectory file from browser
