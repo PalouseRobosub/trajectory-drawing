@@ -107,9 +107,9 @@ jobs:
           echo "os_name=$os_name" >> "$GITHUB_OUTPUT"
           
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            powershell Compress-Archive -Path dist\\main.exe -DestinationPath robosub-trajectory-drawing-${os_name}-v${{ steps.version.outputs.version }}.zip
+            powershell Compress-Archive -Path dist\\robosub-trajectory-drawing.exe -DestinationPath robosub-trajectory-drawing-${os_name}-v${{ steps.version.outputs.version }}.zip
           else
-            tar -czf robosub-trajectory-drawing-${os_name}-v${{ steps.version.outputs.version }}.tar.gz -C dist main
+            tar -czf robosub-trajectory-drawing-${os_name}-v${{ steps.version.outputs.version }}.tar.gz -C dist robosub-trajectory-drawing -C .. launch.sh
           fi
 
       - name: Upload artifact (for release aggregation)
