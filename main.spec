@@ -1,10 +1,19 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+import sys
+
+if sys.platform.startswith("win"):
+    icon_file = "icon.ico"
+elif sys.platform == "darwin":
+    icon_file = "icon.icns"
+else:
+    icon_file = "icon.png"
 
 a = Analysis(
     ['./main.py'],
     pathex=[],
     binaries=[],
+    name='robosub-trajectory-drawing',
     datas=[('./out', './out')],
     hiddenimports=['flask'],
     hookspath=[],
@@ -13,6 +22,7 @@ a = Analysis(
     excludes=[],
     noarchive=False,
     optimize=0,
+    icon=icon_file,
 )
 pyz = PYZ(a.pure)
 
