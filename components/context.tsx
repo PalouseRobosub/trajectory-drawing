@@ -110,7 +110,7 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
         );
 
         const len = Math.floor(curve.getLength());
-        segPoints = curve.getSpacedPoints(len * 2);
+        segPoints = curve.getSpacedPoints(len * 3);
       } else {
         const start = new THREE.Vector3(
           waypoint.position.x,
@@ -125,7 +125,7 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
 
         const lineCurve = new THREE.LineCurve3(start, end);
         const len = Math.floor(lineCurve.getLength());
-        segPoints = lineCurve.getSpacedPoints(len * 2);
+        segPoints = lineCurve.getSpacedPoints(len * 3);
       }
 
       points.push(...segPoints);
