@@ -36,9 +36,13 @@ const TrajectoryList = () => {
     setState({...state, displayPaths: newDisplayPaths})
   }
 
+  // const newTrajectory = () => {
+  //
+  // }
+
   return (
-      <div className="w-[20vw]">
-        <p className="border-b-2 text-center bg-gray-200 p-2 text-lg h-12">Loaded Trajectories</p>
+      <div className="w-[20vw] flex flex-col items-center">
+        <p className="border-b-2 text-center bg-gray-200 p-2 text-lg h-12 w-full">Loaded Trajectories</p>
         <Table>
           <TableHeader>
             <TableRow>
@@ -55,6 +59,9 @@ const TrajectoryList = () => {
             ))}
           </TableBody>
         </Table>
+        {/*<Button onClick={newTrajectory}>*/}
+        {/*  New Trajectory*/}
+        {/*</Button>*/}
       </div>
   )
 }
