@@ -2,7 +2,7 @@
 
 import {createContext, useContext, useEffect, useState} from "react";
 import {Obstacle, State, Trajectory} from "@/app/types";
-import {Vector3} from "three";
+import {Quaternion, Vector3} from "three";
 import * as THREE from "three";
 
 const defaultState: State = {
@@ -43,7 +43,7 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
   });
   const [trajectories, setTrajectories] = useState<Trajectory[]>([])
   const [obstacles, setObstacles] = useState<Obstacle[]>([])
-  const [subPoints, setSubPoints] = useState<Vector3[]>([])
+  const [subPoints, setSubPoints] = useState<{ position: Vector3, orientation: Quaternion }[]>([])
 
   const loadTrajectories = async () => {
     let files: string[] = []
@@ -94,13 +94,13 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
 
     const traj = trajectories[state.subPath];
 
-    const points: Vector3[] = []
+    const points: { position: Vector3, orientation: Quaternion }[] = []
 
     traj.waypoints.forEach((waypoint, i) => {
       if (i === traj.waypoints.length - 1) return;
 
       const next = traj.waypoints[i + 1];
-      let segPoints: THREE.Vector3[];
+      let segPoints: Vector3[];
 
       if (waypoint.bezier) {
         const curve = new THREE.QuadraticBezierCurve3(
@@ -110,14 +110,14 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
         );
 
         const len = Math.floor(curve.getLength());
-        segPoints = curve.getSpacedPoints(len * 3);
+        segPoints = curve.getSpacedPoints(len * 5);
       } else {
-        const start = new THREE.Vector3(
+        const start = new Vector3(
           waypoint.position.x,
           waypoint.position.y,
           waypoint.position.z
         );
-        const end = new THREE.Vector3(
+        const end = new Vector3(
           next.position.x,
           next.position.y,
           next.position.z
@@ -125,10 +125,28 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
 
         const lineCurve = new THREE.LineCurve3(start, end);
         const len = Math.floor(lineCurve.getLength());
-        segPoints = lineCurve.getSpacedPoints(len * 3);
+        segPoints = lineCurve.getSpacedPoints(len * 5);
       }
 
-      points.push(...segPoints);
+      const full = segPoints.map((point, j) => {
+        const t = j / (segPoints.length - 1);
+        const qStart = new Quaternion().copy(waypoint.orientation).normalize();
+        const qEnd = new Quaternion(
+          next.orientation.x,
+          next.orientation.y,
+          next.orientation.z,
+          next.orientation.w
+        ).normalize();
+
+        const qInterp = new Quaternion().copy(qStart).slerp(qEnd, t);
+
+        return {
+          position: point,
+          orientation: qInterp.normalize(),
+        };
+      });
+
+      points.push(...full);
 
     });
 
@@ -153,6 +171,6 @@ const Context = ({ children }: { children: React.ReactNode } ) => {
 const useStateContext = () => useContext(stateContext) as { state: State , setState: (state: State) => void }
 const useTrajectoryContext = () => useContext(trajectoryContext) as { trajectories: Trajectory[], setTrajectories: (trajectories: Trajectory[]) => void }
 const useObstacleContext = () => useContext(obstacleContext) as { obstacles: Obstacle[], setObstacles: (obstacles: Obstacle[]) => void }
-const useSubPointsContext = () => useContext(subPointsContext) as { subPoints: Vector3[], setSubPoints: (subPoints: Vector3[]) => void }
+const useSubPointsContext = () => useContext(subPointsContext) as { subPoints: { position: Vector3, orientation: Quaternion }[], setSubPoints: (subPoints: { position: Vector3, orientation: Quaternion }[]) => void }
 
 export { Context, useStateContext, useTrajectoryContext, useObstacleContext, useSubPointsContext }

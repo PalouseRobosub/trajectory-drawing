@@ -315,12 +315,13 @@ const Hull = ({ position }: { position: [number, number, number] }) => {
   );
 };
 
-const Guppie = ({ waypoint, pos }: { waypoint: Waypoint, pos: Vector3 }) => {
+const Guppie = ({ waypoint, point }: { waypoint: Waypoint, point: { position: Vector3, orientation: Quaternion } }) => {
   // const quat = new Quaternion(waypoint.orientation.x, waypoint.orientation.y, waypoint.orientation.z, waypoint.orientation.w).normalize();
   return (
     //  guppie parent group
     <group
-      position={pos}
+      position={point.position}
+      quaternion={point.orientation}
       // position={cartToArray(waypoint.position)}
       // quaternion={quat}
     >

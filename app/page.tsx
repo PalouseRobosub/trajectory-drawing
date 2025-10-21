@@ -52,7 +52,7 @@ export default function Home() {
                 )
               })
             }
-            {state.showSubModel && trajectories[state.subPath] && <Guppie waypoint={trajectories[state.subPath].waypoints[state.subPoint]} pos={subPoints[state.subPoint]}/>}
+            {state.showSubModel && trajectories[state.subPath] && <Guppie waypoint={trajectories[state.subPath].waypoints[state.subPoint]} point={subPoints[state.subPoint]}/>}
           </Suspense>
         </Canvas>
       {state.showSubModel && trajectories[state.subPath] && <Playback/>}
