@@ -56,10 +56,6 @@ def get_contents():
 def get(path):
     return send_from_directory(path=path, directory=check_safe("/"))
 
-@app.route("/test", methods=["GET"])
-def test():
-    return os.getcwd()
-
 @app.route("/api/<path:path>", methods=["PUT"])
 def put(path):
     filepath = check_safe(path)
