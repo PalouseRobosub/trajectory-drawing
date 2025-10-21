@@ -67,5 +67,11 @@ and bezier gizmos.
 - [ ] Make the loaded trajectory menu look better (collapsing folders etc.)
 - [ ] `poolsetup.json` to save obstacles and pool options
 - [ ] Automatic collision warnings (path exits water etc.)
-- [ ] Sub model shows correct orientation
+- [x] Sub model shows correct orientation
 - [ ] Create new trajectory file from browser
+- [ ] Sub follows path with play button
+
+## Math Stuff
+
+- 1 unit is scaled to 1 meter
+- Sub steps through trajectory at 1/5 unit (20cm) intervals
