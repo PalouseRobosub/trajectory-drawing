@@ -41,3 +41,9 @@ yarn-error.log*
 next-env.d.ts
 
 .idea/
+.venv/
+
+static/
+/buildcommand.txt
+__pycache__/
+dist/

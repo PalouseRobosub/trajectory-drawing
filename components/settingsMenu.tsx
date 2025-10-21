@@ -1,20 +1,23 @@
-'use client'
-
-import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group";
+import {Switch} from "@/components/ui/switch";
 import {Label} from "@/components/ui/label";
+import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group";
 import {useStateContext} from "@/components/context";
-import {Input} from "@/components/ui/input";
 
-const WaypointOptionsMenu = () => {
+
+const SettingsMenu = () => {
 
   const { state, setState } = useStateContext()
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="font-semibold text-nowrap">Waypoint Options</div>
+    <div className="flex flex-col items-center gap-2 w-[20vw]">
+      <p className="border-b-2 text-center bg-gray-200 p-2 text-lg w-full h-12">Settings</p>
+      <div className="flex flex-row gap-2 items-center">
+        Autosave
+        <Switch className="data-[state=checked]:bg-green-400" checked={state.autosave} onCheckedChange={(checked) => setState({...state, autosave: checked})} />
+      </div>
       <div className="flex flex-row items-center gap-2 text-nowrap">
         <Label htmlFor="dots">Dot Waypoints:</Label>
-        <Input type="checkbox" id="dots" className="min-w-32 w-full accent-neutral-900" defaultChecked={state.waypointOptions.dotWaypoints} onChange={(e) => setState({...state, waypointOptions: {...state.waypointOptions, dotWaypoints: e.target.checked}})} />
+        <Switch id="dots" className="data-[state=checked]:bg-green-400" checked={state.waypointOptions.dotWaypoints} onCheckedChange={(checked) => setState({...state, waypointOptions: {...state.waypointOptions, dotWaypoints: checked}})} />
       </div>
       <div className="flex flex-row items-center gap-2 text-nowrap">
         Waypoint Labels:
@@ -33,8 +36,12 @@ const WaypointOptionsMenu = () => {
           </div>
         </RadioGroup>
       </div>
+      <div className="flex flex-row items-center gap-2 text-nowrap">
+        <Label htmlFor="gizmos">Show Gizmos:</Label>
+        <Switch id="gizmos" className="data-[state=checked]:bg-green-400" checked={state.showGizmos} onCheckedChange={(checked) => setState({...state, showGizmos: checked})} />
+      </div>
     </div>
   )
 }
 
-export default WaypointOptionsMenu
+export default SettingsMenu;

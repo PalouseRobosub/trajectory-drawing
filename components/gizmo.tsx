@@ -1,14 +1,14 @@
 import {Cone, DragControls, Edges, Line, Outlines, Plane, Sphere} from "@react-three/drei";
-import {useStateContext, useWaypointContext} from "@/components/context";
+import {useStateContext, useTrajectoryContext} from "@/components/context";
 import * as THREE from "three";
 import {useEffect, useRef, useState} from "react";
 import {Group, Matrix4, Vector3} from "three";
 
 type AxisLimits = [[number, number] | undefined, [number, number] | undefined, [number, number] | undefined] | undefined
 
-const ControlPoint = ({ waypointIndex }: { waypointIndex: number }) => {
+const Gizmo = ({ waypointIndex, trajectoryIndex }: { waypointIndex: number, trajectoryIndex: number }) => {
 
-  const { waypoints, setWaypoints } = useWaypointContext()
+  const { trajectories, setTrajectories } = useTrajectoryContext()
   const { state, setState } = useStateContext();
   const [activeDrag, setActiveDrag] = useState<boolean>(false);
   const [dragLimits, setDragLimits] = useState<AxisLimits>(undefined);
@@ -16,15 +16,18 @@ const ControlPoint = ({ waypointIndex }: { waypointIndex: number }) => {
 
   useEffect(() => {
     if (!dragRef.current) return;
-    const position = waypoints[waypointIndex].controlPoint;
+    const waypoint = trajectories[trajectoryIndex].waypoints[waypointIndex];
+    const position = waypoint.controlPoint;
     const vector = new Vector3(position.x, position.y, position.z);
     const matrix = new Matrix4().setPosition(vector);
     dragRef.current.matrix.copy(matrix);
-  }, [])
+  }, []) // eslint-disable-line
 
   const updatePos = () => {
     if (!dragRef.current) return;
-    const newWaypoints = [...waypoints];
+    const newTrajectories = [...trajectories]
+    const trajectory = trajectories[trajectoryIndex]
+    const newWaypoints = [...trajectory.waypoints];
     const matrix = dragRef.current.matrixWorld;
     const vector = new THREE.Vector3();
     vector.setFromMatrixPosition(matrix);
@@ -32,7 +35,12 @@ const ControlPoint = ({ waypointIndex }: { waypointIndex: number }) => {
       ...newWaypoints[waypointIndex],
       controlPoint: vector
     }
-    setWaypoints(newWaypoints);
+    newTrajectories[trajectoryIndex] = {
+      ...newTrajectories[trajectoryIndex],
+      waypoints: newWaypoints
+    }
+
+    setTrajectories(newTrajectories);
   }
 
   const lockAxis = (axis: 'x'|'y'|'z'|'xy'|'xz'|'yz') => {
@@ -167,4 +175,4 @@ const ControlPoint = ({ waypointIndex }: { waypointIndex: number }) => {
   )
 }
 
-export default ControlPoint;
+export default Gizmo;
