@@ -2,7 +2,7 @@ name: Cross-Platform Build and Release
 
 on:
   push:
-    branches: [local-app]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
